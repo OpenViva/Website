@@ -72,11 +72,11 @@
   > footer {
     background-color: #343a40;
     padding: 1em;
-    bottom: 0;
+    bottom: -4em;
     position: sticky;
-    animation: footer-hide 0.3s forwards;
     overflow: hidden;
     line-height: 100%;
+    transition: bottom 0.3s ease;
 
     .links {
       float: right;
@@ -87,20 +87,9 @@
     }
 
     &.sticky {
-      animation: footer-show 0.3s forwards;
+      bottom: 0;
     }
   }
-}
-
-@keyframes footer-show {
-  0% { bottom: -4em; }
-  100% { bottom: 0; }
-}
-
-@keyframes footer-hide {
-  0% { bottom: 0; }
-  99.9% { bottom: -4em; }
-  100% { position: static }
 }
 
 

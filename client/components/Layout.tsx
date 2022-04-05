@@ -40,19 +40,14 @@ export default function Layout({ className, stickyFooter, children }: LayoutProp
       <div className={`content${className ? ` ${className}` : ""}`}>
         {children}
       </div>
-      <Footer className={top ? " sticky" : ""} />
+      <footer className={(top ? "sticky" : undefined)}>
+        OpenViva is an Open Source project developed by OpenViva Community
+        <div className="links">
+          <ExLink to="https://github.com/OpenViva">GitHub</ExLink>
+          <Link to="/privacy">Privacy Policy</Link>
+        </div>
+      </footer>
     </div>
   );
 }
 
-function Footer(props: React.ComponentProps<"footer">) {
-  return (
-    <footer {...props}>
-      OpenViva is an Open Source project developed by OpenViva Community
-      <div className="links">
-        <ExLink to="https://github.com/OpenViva">GitHub</ExLink>
-        <Link to="/privacy">Privacy Policy</Link>
-      </div>
-    </footer>
-  );
-}
