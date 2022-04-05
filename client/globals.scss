@@ -2,4 +2,30 @@
 * {
   padding: 0;
   margin: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+html {
+  background-color: #343a40;
+  color: #fff;
+  font-family: "Segoe UI", sans-serif;
+}
+
+a {
+  text-decoration: inherit;
+  color: inherit;
+  transition: color 0.15s;
+  font-weight: bold;
+
+  &:hover {
+    color: #b3b3b3;
+  }
+
+  &:active {
+    color: #a3a3a3;
+  }
 }

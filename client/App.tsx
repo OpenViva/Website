@@ -21,6 +21,11 @@ export default hot(module)(function App({ initialData }: Props) {
     content = (
       <Switch>
         <Route path="/" exact component={IndexPage} />
+        <Route path="/download" exact component={IndexPage} />
+        <Route path="/mods" exact component={IndexPage} />
+        <Route path="/faq" exact component={IndexPage} />
+        <Route path="/docs" exact component={IndexPage} />
+        <Route path="/privacy" exact component={IndexPage} />
         <Redirect to="/" />
       </Switch>
     );
