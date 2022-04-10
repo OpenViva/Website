@@ -5,6 +5,8 @@
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   align-content: center;
   
   &.full {
@@ -13,11 +15,6 @@
   
   &.vertical {
     flex-direction: row;
-  }
-  
-  &.centered {
-    justify-content: center;
-    align-items: center;
   }
   
   .Layout.compact & {

@@ -15,7 +15,7 @@ export default function DownloadPage() {
   
   return (
     <Layout className="DownloadPage">
-      <Section full>
+      <Section>
         <Segment>
           <LoremIpsum count={3} />
           <div className="list">
@@ -40,8 +40,6 @@ function Release({ release, id, active, setActive }: ReleaseProps) {
     ev.preventDefault();
     setActive(active ? null : id);
   }, [active, id, setActive]);
-  
-  console.log(release);
   
   return (
     <div className="Release">

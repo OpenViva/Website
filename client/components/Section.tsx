@@ -6,13 +6,12 @@ export interface SectionProps {
   className?: string;
   full?: boolean;
   vertical?: boolean;
-  centered?: boolean;
   children?: React.ReactNode;
 }
 
-export default function Section({ className, full, vertical, centered, children }: SectionProps) {
+export default function Section({ className, full, vertical, children }: SectionProps) {
   return (
-    <section className={classJoin("Section", full && "full", vertical && "vertical", centered && "centered", className)}>
+    <section className={classJoin("Section", full && "full", vertical && "vertical", className)}>
       {children}
     </section>
   );
