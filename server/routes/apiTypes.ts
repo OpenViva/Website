@@ -1,7 +1,6 @@
+import { Releases } from "../controllers/github";
 
-export interface IndexResponse {
-  kek: string;
-}
+export { Releases };
 
 export interface ErrorResponse {
   error: {
@@ -9,4 +8,15 @@ export interface ErrorResponse {
     message: string;
     stack?: string;
   };
+}
+
+export interface IndexPageResponse {
+  latest: {
+    version: string;
+    url: string;
+  } | null;
+}
+
+export interface DownloadsPageResponse {
+  releases: Releases | null;
 }

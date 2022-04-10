@@ -1,0 +1,75 @@
+
+.Button {
+  position: relative;
+  display: inline-block;
+  background: #ad7b00;
+  border: 1px solid #8d6700;
+  box-shadow: rgba(#8d6700, 0.2) 0 -5px 8px inset;
+  color: rgba(#ffcb67, 0.9);
+  font-weight: bold;
+  padding: 0.5em;
+  border-radius: 0.5em;
+  overflow: hidden;
+  cursor: pointer;
+  transition: background-color 0.1s;
+  user-select: none;
+  text-align: center;
+  min-width: 10em;
+  white-space: nowrap;
+  
+  label {
+    display: inline-block;
+    background: #ffcb67;
+    margin: -0.5em -0.5em -0.5em 0.4em;
+    padding: 0.5em 0.4em;
+    color: rgba(#5d3b00, 0.8);
+    box-shadow: inherit;
+    cursor: inherit;
+    transition: background-color 0.1s;
+    float: right;
+  }
+  
+  &:hover, &:focus {
+    background: #a47500;
+    
+    label {
+      background: #f5c262;
+    }
+  }
+  
+  &:active {
+    background: #8a6600;
+    
+    label {
+      background: #e3b55b;
+    }
+  }
+  
+  &.primary {
+    background: #ffcb67;
+    border-color: #ad7b00;
+    box-shadow: rgba(#ad7b00, 0.2) 0 -5px 8px inset;
+    color: rgba(#5d3b00, 0.8);
+    
+    label {
+      background: #ad7b00;
+      color: rgba(#ffcd77, 0.8);
+    }
+    
+    &:hover, &:focus {
+      background: #f5c262;
+  
+      label {
+        background: #a47500;
+      }
+    }
+  
+    &:active {
+      background: #e3b55b;
+  
+      label {
+        background: #8a6600;
+      }
+    }
+  }
+}

@@ -1,0 +1,50 @@
+
+.DownloadPage {
+  .Segment {
+    max-width: 50em;
+  }
+  
+  .list {
+    margin-top: 1em;
+    border-top: 2px solid #ad7b00;
+  }
+  
+  .githubButton {
+    display: block;
+    width: fit-content;
+    margin: 1em auto 0;
+  }
+}
+
+.Release {
+  border-top: 1px solid #ad7b00;
+  
+  .header {
+    font-weight: bold;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 0.2em;
+    
+    .name {
+      margin-right: auto;
+    }
+    
+    .meta {
+      opacity: 0.5;
+      margin-left: 0.5em;
+    }
+  
+    a:not(:first-child) {
+      margin-left: 1em;
+    }
+  }
+  
+  .notes {
+    padding: 0.2em 1.5em;
+    margin-bottom: 0.5em;
+    background-color: #fff9e2;
+    border: 1px solid #ffe53e;
+    border-radius: 0.25em;
+  }
+}

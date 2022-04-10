@@ -17,6 +17,7 @@
 		"lint-fix": "eslint --ext .js --ext .jsx --ext .ts --ext .tsx --ignore-path .gitignore . --fix"
 	},
 	"dependencies": {
+		"@octokit/core": "^3.6.0",
 		"axios": "^0.21.2",
 		"body-parser": "^1.19.0",
 		"chalk": "^4.1.1",
@@ -26,6 +27,7 @@
 		"express": "^4.17.1",
 		"express-handlebars": "^5.3.2",
 		"express-promise-router": "^4.1.0",
+		"lorem-ipsum": "^2.0.4",
 		"morgan": "^1.10.0",
 		"prop-types": "^15.7.2",
 		"query-string": "^7.0.1",

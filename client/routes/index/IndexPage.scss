@@ -1,23 +1,33 @@
 
 .IndexPage {
   .logo {
-    transition: width 0.3s;
-    width: 30vw;
+    width: 0;
+    flex: 1;
+    max-width: 50vh;
     height: auto;
-
+    transform: scale(1);
+    transition: transform 0.3s;
+    
     &:hover {
-      width: 35vw;
+      transform: scale(1.2);
+    }
+    
+    .Layout.compact & {
+      width: 100%;
+      flex: unset;
     }
   }
-
-  section {
-    padding: 2.5em;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    &.full {
-      height: calc(100vh - 8em);
+  
+  .main {
+    flex: 1.5;
+    max-width: 75vh;
+    
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1em;
+      margin-top: 2em;
     }
   }
 }

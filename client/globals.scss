@@ -20,12 +20,14 @@ a {
   color: inherit;
   transition: color 0.15s;
   font-weight: bold;
-
-  &:hover {
-    color: #b3b3b3;
-  }
-
-  &:active {
-    color: #a3a3a3;
+  
+  &:not(.Button) {
+    &:hover, &:focus {
+      color: #b67000;
+    }
+  
+    &:active {
+      color: #d08400;
+    }
   }
 }

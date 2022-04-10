@@ -1,0 +1,26 @@
+
+.Section {
+  padding: 5em;
+  gap: 5em;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  align-content: center;
+  
+  &.full {
+    min-height: calc(100vh - 8em);
+  }
+  
+  &.vertical {
+    flex-direction: row;
+  }
+  
+  &.centered {
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .Layout.compact & {
+    padding: 2em;
+  }
+}

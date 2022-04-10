@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
+import { classJoin } from "../helpers/utils";
+import useMeasure from "../helpers/useMeasure";
 import ExLink from "./ExLink";
 import "./Layout.scss";
 
 interface LayoutProps {
   className?: string;
   stickyFooter?: boolean;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 export default function Layout({ className, stickyFooter, children }: LayoutProps) {
   const [top, setTop] = useState(stickyFooter || false);
+  const { rect, ref } = useMeasure();
+  const compact = rect ? rect.width < 1024 : false;
   
   useEffect(() => {
     if(!stickyFooter) return;
@@ -25,9 +29,9 @@ export default function Layout({ className, stickyFooter, children }: LayoutProp
   }, [stickyFooter]);
   
   return (
-    <div className="Layout">
+    <div className={classJoin("Layout", compact && "compact")} ref={ref}>
       <header>
-        <NavLink to="/#about" exact>About</NavLink>
+        <NavLink to="/" exact>About</NavLink>
         <NavLink to="/download">Download</NavLink>
         <NavLink to="/mods">Mods & Cards</NavLink>
         <Link to="/" className="logo">

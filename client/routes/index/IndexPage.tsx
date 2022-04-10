@@ -1,17 +1,37 @@
 import React from 'react';
+import { Link } from "react-router-dom";
+import { IndexPageResponse } from "../../../server/routes/apiTypes";
 import Layout from "../../components/Layout";
+import LoremIpsum from '../../components/LoremIpsum';
+import Segment from "../../components/Segment";
+import Button from "../../components/Button";
+import usePageData from "../../helpers/usePageData";
+import Section from "../../components/Section";
+import ExLink from "../../components/ExLink";
 import "./IndexPage.scss";
 
 export default function IndexPage() {
+  const [pageData] = usePageData<IndexPageResponse>();
+  
+  let buttons: React.ReactNode;
+  if(pageData?.latest) {
+    buttons = <>
+      {pageData?.latest ? <Button primary content="Download Latest" label={pageData.latest.version} as={ExLink} to={pageData.latest.url} /> : null}
+      <Button content="Other Versions" as={Link} to="/download" />
+    </>; // eslint-disable-line react/jsx-closing-tag-location
+  } else {
+    buttons = <Button content="Downloads" as={Link} to="/download" />;
+  }
+  
   return (
     <Layout className="IndexPage" stickyFooter>
-      <section className="full">
+      <Section full vertical>
         <img className="logo" src="/static/logoBig.png" alt="OpenViva" />
-      </section>
-      <section>test</section>
-      <section>test</section>
-      <section>test</section>
-      <section>kek</section>
+        <Segment className="main">
+          <LoremIpsum count={2} units="paragraph" />
+          <div className="buttons">{buttons}</div>
+        </Segment>
+      </Section>
     </Layout>
   );
 }
