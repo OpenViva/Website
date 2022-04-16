@@ -1,0 +1,28 @@
+
+.FaqPage {
+  .Segment {
+    max-width: 50em;
+  }
+  
+  .Question {
+    margin: 0 0 1em;
+  }
+  
+  img {
+    display: block;
+    max-width: 75%;
+    margin: 1em auto;
+  }
+}
+
+.Question {
+  .question {
+    cursor: pointer;
+  }
+  
+  .answer {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.3s;
+  }
+}

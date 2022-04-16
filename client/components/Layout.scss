@@ -17,9 +17,13 @@
     padding: 1em 0;
     background-color: #343a40;
     line-height: 100%;
-
-    > * {
-      margin: 0 1em;
+    
+    .half {
+      flex: 1;
+      
+      &:first-child {
+        text-align: right;
+      }
     }
 
     .logo {
@@ -45,6 +49,7 @@
     a {
       position: relative;
       color: inherit;
+      margin: 0 1em;
       
       &:focus {
         color: inherit;
@@ -83,7 +88,7 @@
 
   > .content {
     flex: 1 0 auto;
-    background: url("/static/outside.jpg") center center / cover;
+    background: url("/static/outside.jpg") center center / cover fixed;
   }
 
   > footer {

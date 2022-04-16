@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { classJoin } from "../helpers/utils";
+import { useConfig } from "../hooks/usePageData";
 import useMeasure from "../hooks/useMeasure";
 import ExLink from "./ExLink";
 import "./Layout.scss";
@@ -12,6 +13,7 @@ interface LayoutProps {
 }
 
 export default function Layout({ className, stickyFooter, children }: LayoutProps) {
+  const config = useConfig();
   const [top, setTop] = useState(stickyFooter || false);
   const { rect, ref } = useMeasure();
   const compact = rect ? rect.width < 1024 : false;
@@ -31,15 +33,19 @@ export default function Layout({ className, stickyFooter, children }: LayoutProp
   return (
     <div className={classJoin("Layout", compact && "compact")} ref={ref}>
       <header>
-        <NavLink to="/" exact>About</NavLink>
-        <NavLink to="/download">Download</NavLink>
-        <NavLink to="/mods">Mods & Cards</NavLink>
+        <div className='half'>
+          <NavLink to="/" exact>About</NavLink>
+          <NavLink to="/download">Download</NavLink>
+          <NavLink to="/mods">Mods & Cards</NavLink>
+        </div>
         <Link to="/" className="logo">
           <img src="/static/openviva_small.png" alt="logo" width={64} height={64} />
         </Link>
-        <NavLink to="/faq">FAQ</NavLink>
-        <NavLink to="/docs">API Documentation</NavLink>
-        <ExLink to="https://discord.gg/UEBGNbzv2p" className="discord">Discord</ExLink>
+        <div className='half'>
+          <NavLink to="/faq">FAQ</NavLink>
+          <ExLink to="https://github.com/OpenViva">GitHub</ExLink>
+          <ExLink to={config.discordInvite} className="discord">Discord</ExLink>
+        </div>
       </header>
       <div className={`content${className ? ` ${className}` : ""}`}>
         {children}
@@ -47,7 +53,6 @@ export default function Layout({ className, stickyFooter, children }: LayoutProp
       <footer className={(top ? "sticky" : undefined)}>
         OpenViva is an Open Source project developed by OpenViva Community
         <div className="links">
-          <ExLink to="https://github.com/OpenViva">GitHub</ExLink>
           <Link to="/privacy">Privacy Policy</Link>
         </div>
       </footer>

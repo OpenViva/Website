@@ -5,6 +5,8 @@ import defaultConfig from "../../configs.json";
 
 interface Configs {
   port: number;
+  discordInvite: string;
+  contactEmail: string;
   github: {
     owner: string;
     repo: string;

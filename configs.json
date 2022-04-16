@@ -1,5 +1,7 @@
 {
 	"port": 3939,
+	"discordInvite": "https://discord.gg/UEBGNbzv2p",
+	"contactEmail": "contact@viva-project.org",
 	"github": {
 		"owner": "OpenViva",
 		"repo": "OpenViva",

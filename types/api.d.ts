@@ -17,6 +17,7 @@ export interface ErrorResponse {
 
 export interface InitialData {
   _csrf: string;
+  _config: Config;
 }
 
 export interface JustId {
@@ -24,7 +25,8 @@ export interface JustId {
 }
 
 export interface Config {
-
+  discordInvite: string;
+  contactEmailBase64: string;
 }
 
 

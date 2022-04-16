@@ -5,6 +5,8 @@ import { ToastContainer } from "react-toastify";
 import { usePageDataInit, PageDataContext } from "./hooks/usePageData";
 import IndexPage from "./routes/index/IndexPage";
 import DownloadPage from "./routes/downloads/DownloadPage";
+import FaqPage from "./routes/faq/FaqPage";
+import PrivacyPage from "./routes/privacy/PrivacyPage";
 import "./globals.scss";
 
 interface Props {
@@ -35,9 +37,8 @@ export default hot(module)(function App({ initialData }: Props) {
         <Route path="/" exact component={IndexPage} />
         <Route path="/download" exact component={DownloadPage} />
         <Route path="/mods" exact component={IndexPage} />
-        <Route path="/faq" exact component={IndexPage} />
-        <Route path="/docs" exact component={IndexPage} />
-        <Route path="/privacy" exact component={IndexPage} />
+        <Route path="/faq" exact component={FaqPage} />
+        <Route path="/privacy" exact component={PrivacyPage} />
         <Redirect to="/" />
       </Switch>
       <ToastContainer position="bottom-right" newestOnTop />

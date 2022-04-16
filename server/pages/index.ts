@@ -7,6 +7,10 @@ export const router = PromiseRouter();
 
 router.use("/download", download.router);
 
+router.get<number, Empty>(["/faq", "/privacy"], async (req, res) => {
+  res.react({});
+});
+
 router.get<never, IndexPageResponse>('/', async (req, res) => {
   const releases = await githubController.getReleases();
   const latest = releases[0];

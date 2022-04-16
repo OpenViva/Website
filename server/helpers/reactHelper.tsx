@@ -6,6 +6,7 @@ import App from "../../client/App";
 import { InitialData } from "../../types/api";
 import index from '../views/index.handlebars';
 import HTTPError from "./HTTPError";
+import configs from "./configs";
 
 const removeTags = /[<>]/g;
 const tagsToReplace: Record<string, string> = {
@@ -28,6 +29,10 @@ export function reactMiddleware(req: expressCore.Request, ogRes: expressCore.Res
           const initialData: InitialData & Data = {
             ...data,
             _csrf: req.csrfToken ? req.csrfToken() : undefined as any,
+            _config: {
+              discordInvite: configs.discordInvite,
+              contactEmailBase64: Buffer.from(configs.contactEmail).toString("base64"),
+            },
           };
           
           const initialDataJSON = JSON.stringify(initialData).replace(removeTags, tag => tagsToReplace[tag] || tag);
