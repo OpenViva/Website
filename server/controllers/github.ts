@@ -1,29 +1,47 @@
+import SQL from "sql-template-strings";
 import { Octokit } from "@octokit/core";
 import { Endpoints } from "@octokit/types/dist-types/generated/Endpoints";
+import configs from "../helpers/configs";
+import db from "../helpers/db";
+import HTTPError from "../helpers/HTTPError";
 
 export type Releases = Endpoints['GET /repos/{owner}/{repo}/releases']['response']['data'];
 
-const CACHE_LIFETIME = 5 * 60 * 1000; // 5 min
-
 const octokit = new Octokit();
 
-const versionsCache = {
-  releases: null as Releases | null,
-  time: 0,
-};
+interface ReleasesCache {
+  releases: Releases;
+  created: number;
+}
 
 export async function getReleases() {
-  if(versionsCache.releases && versionsCache.time - Date.now() < CACHE_LIFETIME) return versionsCache.releases;
+  const cache = await db.queryFirst<ReleasesCache>(SQL`
+    SELECT
+      releases,
+      from_timestamp_ms(created) as created
+    FROM releases_cache
+  `);
   
-  const releases = await octokit.request('GET /repos/{owner}/{repo}/releases', {
-    owner: 'OpenViva',
-    repo: 'OpenViva',
+  if(cache && Date.now() - cache.created < configs.github.cacheLifeMs) return cache.releases;
+  
+  const response = await octokit.request('GET /repos/{owner}/{repo}/releases', {
+    owner: configs.github.owner,
+    repo: configs.github.repo,
     per_page: 100, // eslint-disable-line @typescript-eslint/naming-convention
     mediaType: { format: 'html' },
   });
   
-  versionsCache.releases = releases.data;
-  versionsCache.time = Date.now();
+  const releases = response.data;
+  const releasesJSON = JSON.stringify(releases);
   
-  return releases.data;
+  await db.query(SQL`
+    INSERT INTO releases_cache(releases, created)
+    VALUES (${releasesJSON}, NOW())
+    ON CONFLICT (id)
+    DO UPDATE SET
+      releases = ${releasesJSON},
+      created = NOW()
+  `);
+  
+  return releases;
 }

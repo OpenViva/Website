@@ -1,3 +1,18 @@
 {
-	"port": 3939
+	"port": 3939,
+	"github": {
+		"owner": "OpenViva",
+		"repo": "OpenViva",
+		"cacheLifeMs": 600000
+	},
+	"session": {
+		"secret": "=== Change This ==="
+	},
+	"db": {
+		"user": "vivawebsite",
+		"host": "localhost",
+		"database": "vivawebsite",
+		"password": "vivawebsite",
+		"port": 5432
+	}
 }

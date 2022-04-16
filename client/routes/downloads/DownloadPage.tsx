@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
-import { DownloadsPageResponse, Releases } from "../../../server/routes/apiTypes";
-import usePageData from "../../helpers/usePageData";
+import { DownloadsPageResponse, Releases } from "../../../types/api";
+import usePageData from "../../hooks/usePageData";
 import Layout from "../../components/Layout";
 import Section from "../../components/Section";
 import Segment from "../../components/Segment";

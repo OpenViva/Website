@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link } from "react-router-dom";
-import { IndexPageResponse } from "../../../server/routes/apiTypes";
+import { IndexPageResponse } from "../../../types/api";
 import Layout from "../../components/Layout";
 import LoremIpsum from '../../components/LoremIpsum';
 import Segment from "../../components/Segment";
 import Button from "../../components/Button";
-import usePageData from "../../helpers/usePageData";
+import usePageData from "../../hooks/usePageData";
 import Section from "../../components/Section";
 import ExLink from "../../components/ExLink";
 import "./IndexPage.scss";
