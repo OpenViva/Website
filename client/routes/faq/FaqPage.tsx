@@ -83,7 +83,7 @@ export default function FaqPage() {
   const [active, setActive] = useState<number | null>(null);
   
   return (
-    <Layout className="FaqPage">
+    <div className="FaqPage">
       <Section>
         <Segment>
           {questions.map(({ question, answer }, id) => <Question key={id} id={id} question={question} answer={answer(config)} open={active === id} onOpen={setActive} />)}
@@ -92,7 +92,7 @@ export default function FaqPage() {
           </div>
         </Segment>
       </Section>
-    </Layout>
+    </div>
   );
 }
 

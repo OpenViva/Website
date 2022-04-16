@@ -3,6 +3,7 @@ import { Redirect, Route, Switch } from "react-router";
 import { hot } from 'react-hot-loader';
 import { ToastContainer } from "react-toastify";
 import { usePageDataInit, PageDataContext } from "./hooks/usePageData";
+import Layout from "./components/Layout";
 import IndexPage from "./routes/index/IndexPage";
 import DownloadPage from "./routes/downloads/DownloadPage";
 import FaqPage from "./routes/faq/FaqPage";
@@ -34,11 +35,11 @@ export default hot(module)(function App({ initialData }: Props) {
   return (
     <PageDataContext.Provider value={contextData}>
       <Switch>
-        <Route path="/" exact component={IndexPage} />
-        <Route path="/download" exact component={DownloadPage} />
-        <Route path="/mods" exact component={IndexPage} />
-        <Route path="/faq" exact component={FaqPage} />
-        <Route path="/privacy" exact component={PrivacyPage} />
+        <Route path="/" exact render={() => <Layout stickyFooter page={IndexPage} />} />
+        <Route path="/download" exact render={() => <Layout page={DownloadPage} />} />
+        <Route path="/mods" exact render={() => <Layout page={IndexPage} />} />
+        <Route path="/faq" exact render={() => <Layout page={FaqPage} />} />
+        <Route path="/privacy" exact render={() => <Layout page={PrivacyPage} />} />
         <Redirect to="/" />
       </Switch>
       <ToastContainer position="bottom-right" newestOnTop />

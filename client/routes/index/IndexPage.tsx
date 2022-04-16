@@ -24,7 +24,7 @@ export default function IndexPage() {
   }
   
   return (
-    <Layout className="IndexPage" stickyFooter>
+    <div className="IndexPage">
       <Section full vertical>
         <img className="logo" src="/static/logoBig.png" alt="OpenViva" />
         <Segment className="main">
@@ -32,6 +32,6 @@ export default function IndexPage() {
           <div className="buttons">{buttons}</div>
         </Segment>
       </Section>
-    </Layout>
+    </div>
   );
 }

@@ -6,12 +6,12 @@ import LoremIpsum from "../../components/LoremIpsum";
 
 export default function PrivacyPage() {
   return (
-    <Layout className="FaqPage">
+    <div className="FaqPage">
       <Section>
         <Segment>
           <LoremIpsum count={4} units="paragraph" />
         </Segment>
       </Section>
-    </Layout>
+    </div>
   );
 }

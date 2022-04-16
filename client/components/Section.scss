@@ -1,4 +1,6 @@
 
+$breakpoint: 1024px;
+
 .Section {
   padding: 5em;
   gap: 5em;
@@ -9,6 +11,11 @@
   align-items: center;
   align-content: center;
   
+  @media (max-width: $breakpoint) {
+    padding: 2em;
+    gap: 2em;
+  }
+  
   &.full {
     min-height: calc(100vh - 8em);
   }
@@ -18,6 +25,6 @@
   }
   
   .Layout.compact & {
-    padding: 2em;
+    padding: 1em;
   }
 }

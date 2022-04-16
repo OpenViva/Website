@@ -14,7 +14,7 @@ export default function DownloadPage() {
   const [active, setActive] = useState<number | null>(0);
   
   return (
-    <Layout className="DownloadPage">
+    <div className="DownloadPage">
       <Section>
         <Segment>
           <LoremIpsum count={3} />
@@ -24,7 +24,7 @@ export default function DownloadPage() {
           <Button className="githubButton" content="More Versions" as={ExLink} to="https://github.com/OpenViva/OpenViva/releases/" />
         </Segment>
       </Section>
-    </Layout>
+    </div>
   );
 }
 
