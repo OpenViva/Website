@@ -19,7 +19,9 @@
 	"dependencies": {
 		"@octokit/core": "^3.6.0",
 		"axios": "^0.21.2",
+		"bcrypt": "^5.0.1",
 		"body-parser": "^1.19.0",
+		"canvas": "^2.9.1",
 		"chalk": "^4.1.1",
 		"compression": "^1.7.4",
 		"connect-pg-simple": "^7.0.0",
@@ -43,7 +45,8 @@
 		"react-toastify": "^8.2.0",
 		"resize-observer-polyfill": "^1.5.1",
 		"source-map-support": "^0.5.19",
-		"sql-template-strings": "^2.2.2"
+		"sql-template-strings": "^2.2.2",
+		"uuid": "^8.3.2"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.14.6",
@@ -56,6 +59,7 @@
 		"@babel/preset-react": "^7.14.5",
 		"@babel/register": "^7.14.5",
 		"@hot-loader/react-dom": "17.0.1",
+		"@types/bcrypt": "^5.0.0",
 		"@types/body-parser": "^1.19.1",
 		"@types/compression": "^1.7.1",
 		"@types/connect-pg-simple": "^7.0.0",
@@ -71,6 +75,7 @@
 		"@types/react-dom": "^17.0.9",
 		"@types/react-router": "^5.1.16",
 		"@types/react-router-dom": "^5.1.8",
+		"@types/uuid": "^8.3.4",
 		"@types/webpack-dev-middleware": "^5.0.1",
 		"@types/webpack-env": "^1.16.2",
 		"@types/webpack-hot-middleware": "^2.25.5",

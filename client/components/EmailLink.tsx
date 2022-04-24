@@ -1,12 +1,12 @@
 import React from "react";
-import useRSS from "../hooks/useRSS";
+import useSSR from "../hooks/useSSR";
 
 interface EmailLinkProps extends React.ComponentProps<"a"> {
   address: string;
 }
 
 export default function EmailLink({ address, children, ...rest }: EmailLinkProps) {
-  const rss = useRSS();
+  const rss = useSSR();
   if(rss) return null;
   
   const link = window.atob(address);

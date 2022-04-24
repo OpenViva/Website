@@ -1,0 +1,12 @@
+
+.AssetsPage {
+  .header {
+    gap: 1em;
+    align-items: flex-start;
+    
+    .text {
+      flex: 1;
+      align-self: stretch;
+    }
+  }
+}

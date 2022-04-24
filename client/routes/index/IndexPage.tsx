@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from "react-router-dom";
 import { IndexPageResponse } from "../../../types/api";
-import Layout from "../../components/Layout";
 import LoremIpsum from '../../components/LoremIpsum';
 import Segment from "../../components/Segment";
 import Button from "../../components/Button";
@@ -16,11 +15,11 @@ export default function IndexPage() {
   let buttons: React.ReactNode;
   if(pageData?.latest) {
     buttons = <>
-      {pageData?.latest ? <Button primary content="Download Latest" label={pageData.latest.version} as={ExLink} to={pageData.latest.url} /> : null}
-      <Button content="Other Versions" as={Link} to="/download" />
+      {pageData?.latest ? <Button primary label={pageData.latest.version} as={ExLink} to={pageData.latest.url}>Download Latest</Button> : null}
+      <Button as={Link} to="/download">Other Versions</Button>
     </>; // eslint-disable-line react/jsx-closing-tag-location
   } else {
-    buttons = <Button content="Downloads" as={Link} to="/download" />;
+    buttons = <Button as={Link} to="/download">Downloads</Button>;
   }
   
   return (

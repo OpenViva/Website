@@ -1,0 +1,25 @@
+
+.Field {
+  margin-top: 0.75em;
+  
+  .label {
+    font-size: 75%;
+    font-weight: bold;
+    display: block;
+    margin-bottom: -0.1em;
+  }
+  
+  &.fluid {
+    > * {
+      width: 100%;
+      resize: vertical;
+    }
+  }
+  
+  &.required {
+    .label::after {
+      content: "*";
+      color: red;
+    }
+  }
+}

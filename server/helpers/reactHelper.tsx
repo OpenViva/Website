@@ -14,9 +14,7 @@ const tagsToReplace: Record<string, string> = {
   '>': `\\u003E`, // eslint-disable-line @typescript-eslint/naming-convention
 };
 
-export function reactMiddleware(req: expressCore.Request, ogRes: expressCore.Response, next: expressCore.NextFunction) {
-  const res = ogRes as expressCore.ResponseEx<any>;
-  
+export default function reactMiddleware(req: expressCore.RequestEx<any, any, any>, res: expressCore.ResponseEx<any>, next: expressCore.NextFunction) {
   res.react = <Data, >(data: Data) => {
     res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
     res.header('Expires', '-1');
@@ -29,6 +27,7 @@ export function reactMiddleware(req: expressCore.Request, ogRes: expressCore.Res
           const initialData: InitialData & Data = {
             ...data,
             _csrf: req.csrfToken ? req.csrfToken() : undefined as any,
+            _user: req.user || null,
             _config: {
               discordInvite: configs.discordInvite,
               contactEmailBase64: Buffer.from(configs.contactEmail).toString("base64"),

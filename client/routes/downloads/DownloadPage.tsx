@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { DownloadsPageResponse, Releases } from "../../../types/api";
 import usePageData from "../../hooks/usePageData";
-import Layout from "../../components/Layout";
 import Section from "../../components/Section";
 import Segment from "../../components/Segment";
 import LoremIpsum from "../../components/LoremIpsum";
@@ -21,7 +20,7 @@ export default function DownloadPage() {
           <div className="list">
             {pageData?.releases?.map((release, id) => <Release key={release.id} release={release} id={id} active={active === id} setActive={setActive} />)}
           </div>
-          <Button className="githubButton" content="More Versions" as={ExLink} to="https://github.com/OpenViva/OpenViva/releases/" />
+          <Button className="githubButton" as={ExLink} to="https://github.com/OpenViva/OpenViva/releases/" primary>More Versions</Button>
         </Segment>
       </Section>
     </div>

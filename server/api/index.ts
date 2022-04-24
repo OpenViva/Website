@@ -3,6 +3,7 @@ import PromiseRouter from "express-promise-router";
 import expressCore from "express-serve-static-core";
 import HTTPError from "../helpers/HTTPError";
 import { ErrorResponse } from "../../types/api";
+import * as localUser from "./localUser";
 
 export const router = PromiseRouter();
 
@@ -12,16 +13,13 @@ router.use((req, res, next) => {
   next();
 });
 
-
-// API Routes go here
-
+router.use("/localUser", localUser.router);
 
 router.use((req, res, next) => {
   next(new HTTPError(404));
 });
 
-router.use((err: Partial<HTTPError>, req: expressCore.Request, ogRes: expressCore.Response, _next: expressCore.NextFunction) => {
-  const res = ogRes as expressCore.ResponseEx<ErrorResponse>;
+router.use((err: Partial<HTTPError>, req: expressCore.RequestEx<any, any, any>, res: expressCore.ResponseEx<ErrorResponse>, _next: expressCore.NextFunction) => {
   if(err.HTTPcode !== 404) console.error(err);
   
   const code = err.HTTPcode || 500;

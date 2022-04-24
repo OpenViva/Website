@@ -25,5 +25,29 @@ CREATE TABLE releases_cache (
   created TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
   CONSTRAINT only_one_row CHECK (id = 39)
-)
+);
 
+CREATE TABLE users (
+  id UUID PRIMARY KEY,
+  username TEXT NOT NULL,
+  email TEXT NOT NULL UNIQUE,
+  password TEXT NOT NULL,
+  admin BOOLEAN NOT NULL DEFAULT FALSE,
+  confirmed BOOLEAN NOT NULL DEFAULT FALSE,
+  confirm_token TEXT,
+
+  created TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE assets (
+  id UUID PRIMARY KEY,
+  name TEXT NOT NULL,
+  description TEXT NOT NULL,
+  file TEXT NOT NULL,
+  thumbnail TEXT NOT NULL,
+  creator UUID REFERENCES users(id),
+  category TEXT NOT NULL,
+  subcategory TEXT NOT NULL,
+
+  created TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

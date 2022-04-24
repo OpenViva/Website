@@ -18,6 +18,7 @@ export interface ErrorResponse {
 export interface InitialData {
   _csrf: string;
   _config: Config;
+  _user: User | null;
 }
 
 export interface JustId {
@@ -27,6 +28,19 @@ export interface JustId {
 export interface Config {
   discordInvite: string;
   contactEmailBase64: string;
+}
+
+export interface User {
+  id: string;
+  username: string;
+  email: string;
+  confirmed: boolean;
+  created: number;
+}
+
+export enum AssetCategory {
+  CHARACTER = "character",
+  CLOTHING = "clothing",
 }
 
 
@@ -45,7 +59,32 @@ export interface DownloadsPageResponse {
   releases: Releases | null;
 }
 
+export interface AssetsPageResponse {
+
+}
 
 /////////////////////////
 //         API         //
 /////////////////////////
+
+export type LocalUserResponse = User | null;
+
+export interface LocalUserLoginRequest {
+  email: string;
+  password: string;
+}
+
+export type LocalUserLoginResponse = User;
+
+export interface LocalUserRegisterRequest {
+  username: string;
+  email: string;
+  password: string;
+}
+
+export interface LocalUserPatchRequest {
+  username?: string;
+  email?: string;
+  newPassword?: string;
+  password: string;
+}

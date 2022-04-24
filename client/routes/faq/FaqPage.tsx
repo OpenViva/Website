@@ -2,7 +2,6 @@ import React, { useCallback, useRef, useState } from "react";
 import { Config } from "../../../types/api";
 import { useConfig } from "../../hooks/usePageData";
 import { classJoin } from "../../helpers/utils";
-import Layout from "../../components/Layout";
 import LoremIpsum from "../../components/LoremIpsum";
 import Section from "../../components/Section";
 import Segment from "../../components/Segment";

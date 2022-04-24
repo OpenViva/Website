@@ -1,0 +1,42 @@
+
+.Modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 5000;
+  padding: 1em;
+  
+  .Segment {
+    max-width: 100%;
+  }
+  
+  .actions {
+    margin-top: 1em;
+    display: flex;
+    gap: 1em;
+    flex-wrap: wrap;
+    justify-content: center;
+    
+    .Button {
+      max-width: 100%;
+      flex: 0 1 auto;
+    }
+  }
+  
+  &.compact {
+    .actions {
+      gap: 0.5em;
+      flex-direction: column;
+      
+      .Button {
+        min-width: 0;
+      }
+    }
+  }
+}

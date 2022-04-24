@@ -11,10 +11,12 @@
 // }
 
 import * as core from "express-serve-static-core";
+import { User } from "./api";
 
 declare module "express-serve-static-core" {
   export interface RequestEx<P, ResBody, ReqData> extends core.Request<P, ResBody, any, any, any> {
-    data: ReqData;
+    body: ReqData;
+    user?: User | null;
   }
   
   export interface ResponseEx<ResBody> extends core.Response<ResBody, any, any> {
@@ -33,8 +35,29 @@ declare module "express-serve-static-core" {
     ): void;
   }
   
+  export interface ErrorRequestHandlerEx<
+    P = core.ParamsDictionary,
+    ResBody = any,
+    ReqData = any,
+  > {
+    (
+      err: any,
+      req: RequestEx<P, ResBody, ReqData>,
+      res: ResponseEx<ResBody>,
+      next: core.NextFunction,
+    ): void;
+  }
+  
   export interface IRouterMatcher<T> {
+    <P, ResBody, ReqData = never>(handler: ErrorRequestHandlerEx<P, ResBody, ReqData>): T;
+    <P, ResBody, ReqData = never>(...middlewares: Array<RequestHandlerEx<P, ResBody, ReqData>>): T;
     <P, ResBody, ReqData = never>(p: string, ...middlewares: Array<RequestHandlerEx<P, ResBody, ReqData>>): T;
     <P, ResBody, ReqData = never>(p: string[], ...middlewares: Array<RequestHandlerEx<P, ResBody, ReqData>>): T;
+  }
+}
+
+declare module 'express-session' {
+  interface SessionData {
+    userId: string | null;
   }
 }

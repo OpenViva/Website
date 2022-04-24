@@ -31,3 +31,31 @@ a {
     }
   }
 }
+
+p {
+  margin-bottom: 0.75em;
+}
+
+input, textarea {
+  font-size: 80%;
+  padding: 0.4em;
+  border-radius: 0.25em;
+  border: 1px solid #8d6700;
+  background-color: #fffaf0;
+  font-family: inherit;
+  
+  &:focus {
+    box-shadow: 0 0 0.2em #8d6700 inset;
+    outline: none;
+  }
+  
+  &:invalid:not(:placeholder-shown):not([type="file"]) {
+    background-color: #fadcdc;
+  }
+}
+
+hr {
+  margin: 1em 0;
+  border: none;
+  border-top: 1px solid #5d3b00;
+}
