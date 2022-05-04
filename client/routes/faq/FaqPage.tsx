@@ -19,7 +19,10 @@ interface QuestionDef {
 const questions: QuestionDef[] = [
   {
     question: "What Happened to the original Viva?",
-    answer: () => <LoremIpsum count={2} units="paragraph" />,
+    answer: () => <>
+      The original creator of Viva project has annouced he no longer wanted to work on the project
+      as it became too much to do being only a single developer and has decided to work on a new horror game instead.
+    </>,
   }, {
     question: "My VR control buttons don't work!",
     answer: () => <img src="/static/faq/controlls.jpg" alt="VR control tutorial" />,

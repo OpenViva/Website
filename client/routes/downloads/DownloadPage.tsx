@@ -3,9 +3,9 @@ import { DownloadsPageResponse, Releases } from "../../../types/api";
 import usePageData from "../../hooks/usePageData";
 import Section from "../../components/Section";
 import Segment from "../../components/Segment";
-import LoremIpsum from "../../components/LoremIpsum";
 import ExLink from "../../components/ExLink";
 import Button from "../../components/Button";
+import Paragraph from "../../components/Paragraph";
 import "./DownloadPage.scss";
 
 export default function DownloadPage() {
@@ -16,7 +16,15 @@ export default function DownloadPage() {
     <div className="DownloadPage">
       <Section>
         <Segment>
-          <LoremIpsum count={3} />
+          <Paragraph header="Install instructions">
+            Download the latest release from the downloads tab. You should have downloaded a .exe file. This is a self extracting 7zip archive.
+            Run it and you should be prompted where you want to extract your copy to. In most cases, this will likely be in the downloads folder.
+            After clicking &quot;extract&quot; and waiting until the extraction is complete, you should end up with a folder containing the game.
+            Navigate into the folder and double click &quot;viva.exe&quot; and the game should run like normal.
+          </Paragraph>
+          <p>
+            Here you can find the latest releases from github along with a changelog.
+          </p>
           <div className="list">
             {pageData?.releases?.map((release, id) => <Release key={release.id} release={release} id={id} active={active === id} setActive={setActive} />)}
           </div>
