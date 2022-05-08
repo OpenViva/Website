@@ -21,7 +21,7 @@ export function LocalUserProvider({ defaultUser = null, children }: LocalUserPro
   
   const refreshUser = useCallback(async () => {
     const user = await requestJSON<LocalUserResponse>({
-      pathname: "/api/localUser",
+      url: "/api/localUser",
     });
     
     setLocalUser(user);
@@ -31,7 +31,7 @@ export function LocalUserProvider({ defaultUser = null, children }: LocalUserPro
   
   const logout = useCallback(async () => {
     await requestJSON({
-      pathname: "/api/localUser/logout",
+      url: "/api/localUser/logout",
       method: "POST",
     });
     
@@ -40,7 +40,7 @@ export function LocalUserProvider({ defaultUser = null, children }: LocalUserPro
   
   const login = useCallback(async (email: string, password: string) => {
     const user = await requestJSON<LocalUserLoginResponse, LocalUserLoginRequest>({
-      pathname: "/api/localUser/login",
+      url: "/api/localUser/login",
       method: "POST",
       data: { email, password },
     });

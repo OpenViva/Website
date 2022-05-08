@@ -28,7 +28,7 @@ export default function RegisterModal(props: ModalProps) {
     
     const data = new FormIterator(ev.currentTarget).serialize<FormData>();
     await requestJSON<any, LocalUserRegisterRequest>({
-      pathname: "/api/localUser/register",
+      url: "/api/localUser/register",
       method: "POST",
       data,
     });

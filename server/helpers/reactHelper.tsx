@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOMServer from 'react-dom/server';
-import { StaticRouter } from "react-router";
+import { StaticRouter } from "react-router-dom/server";
 import expressCore from "express-serve-static-core";
 import App from "../../client/App";
 import { InitialData } from "../../types/api";
@@ -38,7 +38,7 @@ export default function reactMiddleware(req: expressCore.RequestEx<any, any, any
           
           res.send(index({
             reactContent: ReactDOMServer.renderToString(
-              <StaticRouter location={req.originalUrl} context={{}}>
+              <StaticRouter location={req.originalUrl}>
                 <App initialData={initialData} />
               </StaticRouter>,
             ),

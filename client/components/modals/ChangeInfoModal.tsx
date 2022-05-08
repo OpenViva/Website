@@ -37,7 +37,7 @@ export default function ChangeInfoModal(props: ModalProps) {
     if(!data.newPassword) data.newPassword = undefined;
     
     const newUser = await requestJSON<User, LocalUserPatchRequest>({
-      pathname: "/api/localUser",
+      url: "/api/localUser",
       method: "PATCH",
       data,
     });

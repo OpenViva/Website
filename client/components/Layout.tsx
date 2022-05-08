@@ -11,11 +11,11 @@ const MIN_HEIGHT = 600;
 
 interface LayoutProps {
   stickyFooter?: boolean;
-  page: React.ElementType;
+  children?: React.ReactNode;
 }
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
-export default function Layout({ stickyFooter, page: Page }: LayoutProps) {
+export default function Layout({ stickyFooter, children }: LayoutProps) {
   const [top, setTop] = useState(stickyFooter || false);
   const { rect, ref } = useMeasure();
   const compact = rect ? rect.width < 800 : false;
@@ -38,7 +38,7 @@ export default function Layout({ stickyFooter, page: Page }: LayoutProps) {
          ref={ref}
          style={{ fontSize: scale < 100 ? `${scale}%` : undefined }}>
       <Header compact={compact} />
-      <Page />
+      {children}
       <footer className={(top ? "sticky" : undefined)}>
         <div className="text">
           OpenViva is an Open Source project developed by OpenViva Community
@@ -57,7 +57,7 @@ function Header({ compact = false }) {
   const toggleOpen = useCallback(() => setOpen(o => !o), []);
   
   const links1 = <>
-    <NavLink to="/" exact>About</NavLink>
+    <NavLink to="/">About</NavLink>
     <NavLink to="/download">Download</NavLink>
     <NavLink to="/assets">Mods & Cards</NavLink>
   </>; // eslint-disable-line react/jsx-closing-tag-location

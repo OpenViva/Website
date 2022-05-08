@@ -1,18 +1,18 @@
 import React, { useEffect } from 'react';
-import { Redirect, Route, Switch } from "react-router";
-import { hot } from 'react-hot-loader';
+import { Route, Routes } from "react-router";
 import { ToastContainer } from "react-toastify";
-import { usePageDataInit, PageDataContext } from "./hooks/usePageData";
-import { LocalUserProvider } from "./hooks/useLocalUser";
-import Layout from "./components/Layout";
+import { PageDataProvider } from "./hooks/usePageData";
+import { SSRProvider } from "./hooks/useSSR";
 import IndexPage from "./routes/index/IndexPage";
+import NotFoundPage from "./routes/notFound/NotFoundPage";
 import DownloadPage from "./routes/downloads/DownloadPage";
 import FaqPage from "./routes/faq/FaqPage";
 import PrivacyPage from "./routes/privacy/PrivacyPage";
 import AssetsPage from "./routes/assets/AssetsPage";
+import Layout from "./components/Layout";
 import "./globals.scss";
 
-interface Props {
+interface AppProps {
   initialData: any;
 }
 
@@ -23,9 +23,7 @@ declare global {
 }
 
 // eslint-disable-next-line prefer-arrow-callback
-export default hot(module)(function App({ initialData }: Props) {
-  const contextData = usePageDataInit(initialData);
-  
+export default function App({ initialData }: AppProps) {
   useEffect(() => {
     window._csrf = initialData._csrf;
   }, [initialData._csrf]);
@@ -35,18 +33,18 @@ export default hot(module)(function App({ initialData }: Props) {
   // }
   
   return (
-    <PageDataContext.Provider value={contextData}>
-      <LocalUserProvider defaultUser={initialData._user}>
-        <Switch>
-          <Route path="/" exact render={() => <Layout stickyFooter page={IndexPage} />} />
-          <Route path="/download" exact render={() => <Layout page={DownloadPage} />} />
-          <Route path="/assets" exact render={() => <Layout page={AssetsPage} />} />
-          <Route path="/faq" exact render={() => <Layout page={FaqPage} />} />
-          <Route path="/privacy" exact render={() => <Layout page={PrivacyPage} />} />
-          <Redirect to="/" />
-        </Switch>
+    <SSRProvider>
+      <PageDataProvider initialData={initialData}>
+        <Routes>
+          <Route path="/" element={<Layout stickyFooter><IndexPage /></Layout>} />
+          <Route path="/download" element={<Layout><DownloadPage /></Layout>} />
+          <Route path="/assets" element={<Layout><AssetsPage /></Layout>} />
+          <Route path="/faq" element={<Layout><FaqPage /></Layout>} />
+          <Route path="/privacy" element={<Layout><PrivacyPage /></Layout>} />
+          <Route path="*" element={<Layout><NotFoundPage /></Layout>} />
+        </Routes>
         <ToastContainer position="bottom-right" newestOnTop />
-      </LocalUserProvider>
-    </PageDataContext.Provider>
+      </PageDataProvider>
+    </SSRProvider>
   );
-});
+}

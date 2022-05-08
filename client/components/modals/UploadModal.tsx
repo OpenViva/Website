@@ -32,7 +32,7 @@ export default function UploadModal(props: ModalProps) {
     
     const data = new FormData(ev.currentTarget);
     await requestJSON<any, FormData>({
-      pathname: "/api/assets",
+      url: "/api/assets",
       method: "POST",
       data,
     });
