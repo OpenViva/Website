@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router";
 import { ToastContainer } from "react-toastify";
 import { PageDataProvider } from "./hooks/usePageData";
 import { SSRProvider } from "./hooks/useSSR";
+import { LocalUserProvider } from "./hooks/useLocalUser";
 import IndexPage from "./routes/index/IndexPage";
 import NotFoundPage from "./routes/notFound/NotFoundPage";
 import DownloadPage from "./routes/downloads/DownloadPage";
@@ -35,15 +36,17 @@ export default function App({ initialData }: AppProps) {
   return (
     <SSRProvider>
       <PageDataProvider initialData={initialData}>
-        <Routes>
-          <Route path="/" element={<Layout stickyFooter><IndexPage /></Layout>} />
-          <Route path="/download" element={<Layout><DownloadPage /></Layout>} />
-          <Route path="/assets" element={<Layout><AssetsPage /></Layout>} />
-          <Route path="/faq" element={<Layout><FaqPage /></Layout>} />
-          <Route path="/privacy" element={<Layout><PrivacyPage /></Layout>} />
-          <Route path="*" element={<Layout><NotFoundPage /></Layout>} />
-        </Routes>
-        <ToastContainer position="bottom-right" newestOnTop />
+        <LocalUserProvider defaultUser={initialData._user}>
+          <Routes>
+            <Route path="/" element={<Layout stickyFooter><IndexPage /></Layout>} />
+            <Route path="/download" element={<Layout><DownloadPage /></Layout>} />
+            <Route path="/assets" element={<Layout><AssetsPage /></Layout>} />
+            <Route path="/faq" element={<Layout><FaqPage /></Layout>} />
+            <Route path="/privacy" element={<Layout><PrivacyPage /></Layout>} />
+            <Route path="*" element={<Layout><NotFoundPage /></Layout>} />
+          </Routes>
+          <ToastContainer position="bottom-right" newestOnTop />
+        </LocalUserProvider>
       </PageDataProvider>
     </SSRProvider>
   );

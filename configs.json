@@ -2,6 +2,7 @@
 	"port": 3939,
 	"discordInvite": "https://discord.gg/openviva",
 	"contactEmail": "contact@viva-project.org",
+	"storagePath": "./assets",
 	"github": {
 		"owner": "OpenViva",
 		"repo": "OpenViva",

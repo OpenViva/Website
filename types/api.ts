@@ -43,6 +43,39 @@ export enum AssetCategory {
   CLOTHING = "clothing",
 }
 
+export enum AssetSubcategory {
+  UNKNOWN = "unknown",
+  CHARACTER = "character",
+  BLOUSE = "blouse 1",
+  JACKET = "jacket",
+  PANTY = "panty 1",
+  SANDALS = "sandals 1",
+  SWIMSUIT = "school swimsuit",
+  SHIRT = "shirt 1",
+  SHOE = "shoe 1",
+  SKIRT = "skirt 1",
+  SPATS = "spats",
+  STOCKING = "stockings",
+  TOWEL = "towelWrap",
+  TSHIRT = "tshirt 1",
+}
+
+export enum Order {
+  ASC = "asc",
+  DESC = "desc",
+}
+
+export interface Asset {
+  id: string;
+  name: string;
+  description: string;
+  file: string;
+  creatorName: string;
+  category: AssetCategory;
+  subcategory: AssetSubcategory;
+  created: number;
+}
+
 
 /////////////////////////
 //        Pages        //
@@ -59,8 +92,9 @@ export interface DownloadsPageResponse {
   releases: Releases | null;
 }
 
+export type AssetsPageRequest = AssetsSearchRequest;
 export interface AssetsPageResponse {
-
+  assets: Asset[];
 }
 
 /////////////////////////
@@ -87,4 +121,25 @@ export interface LocalUserPatchRequest {
   email?: string;
   newPassword?: string;
   password: string;
+}
+
+export interface AssetsSearchRequest {
+  text?: string;
+  page?: number;
+  pageSize?: number;
+  ids?: string[];
+  sort?: string;
+  order?: string;
+  category?: AssetCategory[];
+  subcategory?: AssetSubcategory[];
+}
+export type AssetsSearchResponse = Asset[];
+
+export interface AssetsUploadRequest {
+  name: string;
+  description: string;
+  category: AssetCategory;
+  clothing?: Express.Multer.File;
+  character?: Express.Multer.File;
+  skin?: Express.Multer.File;
 }

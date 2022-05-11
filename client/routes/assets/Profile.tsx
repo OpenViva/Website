@@ -22,7 +22,7 @@ export default function Profile() {
           <ChangeInfoModal trigger={<a href="#">Change Account Information</a>} /><br />
           <a href="#" onClick={logout}>Log Out</a><br />
         </div>
-        <UploadModal trigger={<Button fluid primary>Upload New Content</Button>} />
+        <UploadModal trigger={<Button fluid primary>Upload Content</Button>} />
       </Segment>
     );
   } else {

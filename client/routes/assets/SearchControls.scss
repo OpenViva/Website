@@ -1,0 +1,37 @@
+@import '../../mixins';
+
+.SearchControls {
+  @include SegmentBox;
+  
+  width: 100%;
+  margin: 0.5em;
+  border-radius: 1em !important;
+  padding: 0.5em 0.75em;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  max-width: 50em;
+  
+  span {
+    margin-right: 0.5em;
+  }
+  
+  .Dropdown .menu {
+    .RadioButton {
+      text-align: left;
+      border: none;
+      border-radius: 0;
+    }
+  }
+  
+  .divider {
+    display: inline-block;
+    height: 2em;
+    border-right: 1px solid #ad7b00;
+    margin: 0 0.5em;
+  }
+  
+  input {
+    flex: 1;
+  }
+}

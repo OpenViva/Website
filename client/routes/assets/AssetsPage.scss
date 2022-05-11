@@ -1,12 +1,65 @@
 
+$breakpoint: 1024px;
+
 .AssetsPage {
   .header {
     gap: 1em;
     align-items: flex-start;
+    padding-bottom: 0.5em !important;
+    flex-wrap: wrap-reverse;
     
     .text {
       flex: 1;
       align-self: stretch;
+      min-width: 20em;
     }
+  }
+  
+  .controlsWrap {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+  
+  .cards {
+    margin: 0 4.5em 5em;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    box-shadow: 0 20px 50px 70px rgba(0, 0, 0, 0.35);
+    background-color: rgba(0, 0, 0, 0.35);
+    justify-content: space-between;
+  
+    @media (max-width: $breakpoint) {
+      margin: 0 1.5em 2em;
+      justify-content: space-evenly;
+    }
+  }
+  
+  .placeholder {
+    width: 13em;
+    margin: 0 0.5em;
+  }
+  
+  .loaderWrap {
+    width: 100%;
+    text-align: center;
+    padding: 15em 0;
+    color: #f5c262;
+    
+    .Loader {
+      font-size: 10em !important;
+      text-align: center;
+    }
+  }
+  
+  .noResults {
+    width: 100%;
+    text-align: center;
+    padding: 15em 0;
+    font-weight: bold;
+    opacity: 0.5;
   }
 }

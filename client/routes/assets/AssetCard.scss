@@ -1,0 +1,67 @@
+@import '../../mixins';
+
+.AssetCard {
+  @include SegmentBox;
+  
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  margin: 0.5em;
+  padding: 0 0 0.5em;
+  font-size: 120%;
+  font-weight: normal;
+  box-shadow: 0 -5px 5px rgba(#ffcb67, 0.5) inset, 0 0 10px black;
+  border-radius: 1em;
+  transition: 0.3s transform;
+  width: 13em;
+  
+  &:hover {
+    transform: scale(103%);
+  }
+  
+  img {
+    border-radius: 0 0 1em 1em;
+    pointer-events: none;
+    width: 100%;
+    height: auto;
+    box-shadow: 0 5px 15px rgba(#ffcb67, 0.5);
+  }
+  
+  label {
+    font-size: 75%;
+    font-weight: bold;
+  }
+  
+  h3 {
+    margin: 0 0.5em 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: calc(100% - 1em);
+  }
+
+  div {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin: 0 0.5em 0;
+    
+    span {
+      white-space: nowrap;
+      margin-left: 0.5em;
+      width: auto;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+  
+  p {
+    flex-grow: 1;
+    margin: 0 0.5em 0.5em;
+    white-space: pre-wrap;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+}

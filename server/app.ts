@@ -45,6 +45,7 @@ app.use(csrf());
 app.use(userMiddleware);
 app.use(reactMiddleware);
 
+app.use('/assets', express.static('assets'));
 app.use('/api', apiRouter);
 app.use('/', pagesRouter);
 

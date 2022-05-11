@@ -1,0 +1,32 @@
+@import "../mixins";
+
+.Dropdown {
+  display: inline-block;
+  position: relative;
+  vertical-align: bottom;
+  
+  .button {
+    @include PrimaryButtonBox;
+    
+    padding: 0.3em 0.5em;
+    cursor: pointer;
+    font-size: 75%;
+  }
+  
+  .menu {
+    @include ButtonBox;
+    
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    top: 100%;
+    right: 0;
+    z-index: 999;
+    padding: 0;
+    overflow: hidden;
+    
+    > * {
+      margin: 0;
+    }
+  }
+}

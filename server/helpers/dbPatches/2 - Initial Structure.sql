@@ -44,7 +44,6 @@ CREATE TABLE assets (
   name TEXT NOT NULL,
   description TEXT NOT NULL,
   file TEXT NOT NULL,
-  thumbnail TEXT NOT NULL,
   creator UUID REFERENCES users(id),
   category TEXT NOT NULL,
   subcategory TEXT NOT NULL,

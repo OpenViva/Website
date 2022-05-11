@@ -16,6 +16,7 @@ import { User } from "./api";
 declare module "express-serve-static-core" {
   export interface RequestEx<P, ResBody, ReqData> extends core.Request<P, ResBody, any, any, any> {
     body: ReqData;
+    query: ReqData;
     user?: User | null;
   }
   

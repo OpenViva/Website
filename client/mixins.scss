@@ -1,0 +1,54 @@
+
+@mixin SegmentBox {
+  background-color: #ffeec3;
+  border: 1px solid #ffcb67;
+  box-shadow: 0 -5px 5px rgba(#ffcb67, 0.5) inset;
+  padding: 2em;
+  color: #5d3b00 !important;
+  border-radius: 2em;
+  font-size: 120%;
+}
+
+@mixin ButtonBox {
+  display: inline-block;
+  background: #ad7b00;
+  border: 1px solid #8d6700;
+  box-shadow: rgba(#8d6700, 0.2) 0 -5px 8px inset;
+  color: rgba(#ffcb67, 0.9);
+  font-weight: bold;
+  padding: 0.5em;
+  border-radius: 0.5em;
+  transition: background-color 0.1s;
+  user-select: none;
+  text-align: center;
+  white-space: nowrap;
+  font-size: inherit;
+  font-family: inherit;
+  vertical-align: bottom;
+  
+  
+  &:hover, &:focus {
+    background: #a47500;
+  }
+  
+  &:active {
+    background: #8a6600;
+  }
+}
+
+@mixin PrimaryButtonBox {
+  @include ButtonBox;
+  
+  background: #ffcb67;
+  border-color: #ad7b00;
+  box-shadow: rgba(#ad7b00, 0.2) 0 -5px 8px inset;
+  color: rgba(#5d3b00, 0.8);
+  
+  &:hover, &:focus {
+    background: #f5c262;
+  }
+  
+  &:active {
+    background: #e3b55b;
+  }
+}

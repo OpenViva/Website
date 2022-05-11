@@ -1,21 +1,21 @@
 import React, { useCallback, useState } from "react";
 import { toast } from "react-toastify";
-import { AssetCategory } from "../../../types/api";
-import { CARD_HEIGHT, CARD_MAX_BYTES, CARD_WIDTH, extractCharacterMetadata, extractClothingMetadata, Subcategory, subcategoryNames } from "../../../server/helpers/cardUtils";
+import { AssetCategory, AssetSubcategory } from "../../../types/api";
+import { CARD_HEIGHT, CARD_WIDTH, extractCharacterMetadata, extractClothingMetadata, subcategoryNames } from "../../../server/helpers/cardUtils";
 import useAsyncCallback from "../../hooks/useAsyncCallback";
 import useOpen from "../../hooks/useOpen";
 import requestJSON from "../../helpers/requestJSON";
-import { classJoin } from "../../helpers/utils";
 import useObjectURL from "../../hooks/useObjectURL";
 import Button from "../Button";
 import Field from "../Field";
+import RadioButton from "../RadioButton";
 import Modal, { ModalProps } from "./Modal";
 import "./UploadModal.scss";
 
 export default function UploadModal(props: ModalProps) {
   const { open, onOpen, onClose } = useOpen();
   const [category, setCategory] = useState(AssetCategory.CHARACTER);
-  const [subcategory, setSubcategory] = useState<Subcategory | null>(null);
+  const [subcategory, setSubcategory] = useState<AssetSubcategory | null>(null);
   
   const onCategoryChange = useCallback((ev: React.ChangeEvent<HTMLInputElement>) => {
     setCategory(ev.currentTarget.value as AssetCategory);
@@ -37,6 +37,8 @@ export default function UploadModal(props: ModalProps) {
       data,
     });
     
+    toast.success("Your asset has been uploaded. It will become listed on the website after moderator approval.");
+    
     onClose();
   }, [onClose]);
   
@@ -44,58 +46,38 @@ export default function UploadModal(props: ModalProps) {
     function throwError() {
       toast.error("Invalid Image. Make sure you are uploading full size card image.");
       input.value = "";
-      throw new Error("Invalid Image");
+      return;
     }
     
-    if(img.naturalWidth !== CARD_WIDTH) throwError();
-    if(img.naturalHeight !== CARD_HEIGHT) throwError();
+    if(img.naturalWidth !== CARD_WIDTH) return throwError();
+    if(img.naturalHeight !== CARD_HEIGHT) return throwError();
     
-    const data = extractClothingMetadata(img);
-    const decoder = new TextDecoder("utf-8");
-    
-    let pos = 0;
-    if(data[pos] !== 1) throwError();
-    pos++;
-    
-    if(data[pos] !== 0) throwError();
-    pos++;
-    
-    const pieceLength = data[pos];
-    pos++;
-    
-    if(pos + pieceLength > data.length) throwError();
-    const pieceName = decoder.decode(data.slice(pos, pos + pieceLength));
-    
-    pos += pieceLength;
-    const textureLength = data[pos];
-    
-    pos++;
-    if(pos + textureLength > data.length) throwError();
-    const textureName = decoder.decode(data.slice(pos, pos + textureLength));
-    
-    const subcategory = Object.values(Subcategory).includes(pieceName as Subcategory) ? pieceName : Subcategory.UNKNOWN;
-    setSubcategory(subcategory as Subcategory);
+    try {
+      const { subcategory } = extractClothingMetadata(img);
+      
+      setSubcategory(subcategory);
+    } catch(e) {
+      console.error(e);
+      return throwError();
+    }
   }, []);
   
   const onCharacterChange = useCallback(async (img: HTMLImageElement, input: HTMLInputElement) => {
     function throwError() {
       toast.error("Invalid Card. Make sure you are uploading full size card image of correct type.");
       input.value = "";
-      throw new Error("Invalid Image");
+      return;
     }
     
-    if(img.naturalWidth !== CARD_WIDTH) throwError();
-    if(img.naturalHeight !== CARD_HEIGHT) throwError();
+    if(img.naturalWidth !== CARD_WIDTH) return throwError();
+    if(img.naturalHeight !== CARD_HEIGHT) return throwError();
     
-    const data = extractCharacterMetadata(img);
-    
-    const payloadLength = data[0]
-                        + data[1] * 256
-                        + data[2] * 256 * 256
-                        + data[3] * 256 * 256 * 256;
-    
-    console.log(payloadLength, CARD_MAX_BYTES);
-    if(payloadLength > CARD_MAX_BYTES) throwError();
+    try {
+      extractCharacterMetadata(img);
+    } catch(e) {
+      console.error(e);
+      return throwError();
+    }
   }, []);
   
   let fileInputs;
@@ -107,7 +89,7 @@ export default function UploadModal(props: ModalProps) {
   } else {
     fileInputs = <>
       <Field as={ImageInput} label="Clothing Card" name="clothing" required fluid accept="image/png" onImageLoad={onClothingChange} />
-      <Field label="Subcategory" fluid disabled>{subcategoryNames[subcategory || Subcategory.UNKNOWN]}</Field>
+      <Field label="Subcategory" className="subcategory" fluid disabled>{subcategoryNames[subcategory || AssetSubcategory.UNKNOWN]}</Field>
     </>; // eslint-disable-line react/jsx-closing-tag-location
   }
   
@@ -115,8 +97,8 @@ export default function UploadModal(props: ModalProps) {
     <Modal className="UploadModal" open={open} onOpen={onOpen} onClose={onClose} {...props}>
       <form onSubmit={onSubmit}>
         <h3>Upload New Content</h3>
-        <Field label="Name" name="name" placeholder="Name" required fluid max={50} />
-        <Field as="textarea" label="Description" name="description" placeholder="Description..." fluid max={2048} />
+        <Field label="Name" name="name" placeholder="Name" required fluid maxlength={32} />
+        <Field as="textarea" label="Description" name="description" placeholder="Description..." fluid maxlength={512} />
         <Field label="Category">
           <RadioButton id="UploadModalCharacter" name="category"
                        value={AssetCategory.CHARACTER} text="Character"
@@ -134,25 +116,6 @@ export default function UploadModal(props: ModalProps) {
         </div>
       </form>
     </Modal>
-  );
-}
-
-interface RadioButtonProps {
-  id: string;
-  name: string;
-  value: string;
-  text: string;
-  active: boolean;
-  onChange: React.ChangeEventHandler;
-}
-
-function RadioButton({ id, name, value, text, active, onChange }: RadioButtonProps) {
-  return (
-    <div className={classJoin("radioBox", active && "active")}>
-      <input type="radio" id={id} name={name} checked={active}
-             value={value} onChange={onChange} />
-      <label htmlFor={id}>{text}</label>
-    </div>
   );
 }
 

@@ -44,7 +44,7 @@ input, textarea {
   background-color: #fffaf0;
   font-family: inherit;
   
-  &:focus {
+  &:focus:not([type="radio"]):not([type="checkbox"]) {
     box-shadow: 0 0 0.2em #8d6700 inset;
     outline: none;
   }

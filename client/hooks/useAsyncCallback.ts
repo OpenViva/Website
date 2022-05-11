@@ -1,6 +1,6 @@
 import { DependencyList, useCallback, useState } from "react";
 
-export default function useAsyncCallback<T extends(...args: any[]) => Promise<any>>(callback: T, deps: DependencyList) {
+export default function useAsyncCallback<T extends(...args: any[]) => Promise<any>>(callback: T, deps: DependencyList, captureErrors = true) {
   const [loading, setLoading] = useState(false);
   
   const wrapped = useCallback(async (...args: any[]) => {
@@ -8,6 +8,9 @@ export default function useAsyncCallback<T extends(...args: any[]) => Promise<an
       setLoading(true);
       
       return await callback(...args);
+    } catch(e) {
+      if(captureErrors) console.error(e);
+      else throw e;
     } finally {
       setLoading(false);
     }

@@ -1,42 +1,31 @@
 import { createCanvas, Image } from "canvas";
+import { AssetCategory, AssetSubcategory } from "../../types/api";
 
 export const CARD_METADATA_SIZE = 256;
 export const CARD_WIDTH = 1024;
 export const CARD_HEIGHT = 1536;
 export const CARD_MAX_BYTES = 2363271;
 
-export enum Subcategory {
-  UNKNOWN = "unknown",
-  CHARACTER = "character",
-  BLOUSE = "blouse 1",
-  JACKET = "jacket",
-  PANTY = "panty 1",
-  SANDALS = "sandals 1",
-  SWIMSUIT = "school swimsuit",
-  SHIRT = "shirt 1",
-  SHOE = "shoe 1",
-  SKIRT = "skirt 1",
-  SPATS = "spats",
-  STOCKING = "stockings",
-  TOWEL = "towelWrap",
-  TSHIRT = "tshirt 1",
-}
+export const subcategoryNames: Record<AssetSubcategory, string> = {
+  [AssetSubcategory.UNKNOWN]: "Unknown",
+  [AssetSubcategory.CHARACTER]: "Character",
+  [AssetSubcategory.BLOUSE]: "Blouse",
+  [AssetSubcategory.JACKET]: "Jacket",
+  [AssetSubcategory.PANTY]: "Panty",
+  [AssetSubcategory.SANDALS]: "Sandals",
+  [AssetSubcategory.SWIMSUIT]: "School",
+  [AssetSubcategory.SHIRT]: "Shirt",
+  [AssetSubcategory.SHOE]: "Shoe",
+  [AssetSubcategory.SKIRT]: "Skirt",
+  [AssetSubcategory.SPATS]: "Spats",
+  [AssetSubcategory.STOCKING]: "Stockings",
+  [AssetSubcategory.TOWEL]: "Towel Wrap",
+  [AssetSubcategory.TSHIRT]: "T-shirt",
+};
 
-export const subcategoryNames: Record<Subcategory, string> = {
-  [Subcategory.UNKNOWN]: "Unknown",
-  [Subcategory.CHARACTER]: "Character",
-  [Subcategory.BLOUSE]: "Blouse",
-  [Subcategory.JACKET]: "Jacket",
-  [Subcategory.PANTY]: "Panty",
-  [Subcategory.SANDALS]: "Sandals",
-  [Subcategory.SWIMSUIT]: "School",
-  [Subcategory.SHIRT]: "Shirt",
-  [Subcategory.SHOE]: "Shoe",
-  [Subcategory.SKIRT]: "Skirt",
-  [Subcategory.SPATS]: "Spats",
-  [Subcategory.STOCKING]: "Stockings",
-  [Subcategory.TOWEL]: "Towel Wrap",
-  [Subcategory.TSHIRT]: "T-shirt",
+export const categoryNames: Record<AssetCategory, string> = {
+  [AssetCategory.CLOTHING]: "Clothing",
+  [AssetCategory.CHARACTER]: "Character",
 };
 
 export function extractClothingMetadata(img: HTMLImageElement | Image) {
@@ -50,7 +39,33 @@ export function extractClothingMetadata(img: HTMLImageElement | Image) {
     data[i] = imageData.data[i + Math.floor(i / 3)];
   }
   
-  return data;
+  const decoder = new TextDecoder("utf-8");
+  
+  let pos = 0;
+  if(data[pos] !== 1) throw new Error(`Unexpected ${data[pos]} at pos ${pos}`);
+  pos++;
+  
+  if(data[pos] !== 0) throw new Error(`Unexpected ${data[pos]} at pos ${pos}`);
+  pos++;
+  
+  const pieceLength = data[pos];
+  pos++;
+  
+  if(pos + pieceLength > data.length) throw new Error(`Piece name is too long`);
+  const pieceName = decoder.decode(data.slice(pos, pos + pieceLength));
+  
+  pos += pieceLength;
+  const textureLength = data[pos];
+  
+  pos++;
+  if(pos + textureLength > data.length) throw new Error(`Texture name is too long`);
+  const textureName = decoder.decode(data.slice(pos, pos + textureLength));
+  const subcategory = Object.values(AssetSubcategory).includes(pieceName as AssetSubcategory) ? pieceName as AssetSubcategory : AssetSubcategory.UNKNOWN;
+  
+  return {
+    subcategory,
+    textureName,
+  };
 }
 
 export function extractCharacterMetadata(img: HTMLImageElement | Image) {
@@ -67,5 +82,38 @@ export function extractCharacterMetadata(img: HTMLImageElement | Image) {
   data[2] = imageData.data[4];
   data[3] = imageData.data[5];
   
-  return data;
+  const payloadLength = data[0]
+                      + data[1] * 256
+                      + data[2] * 256 * 256
+                      + data[3] * 256 * 256 * 256;
+  
+  if(payloadLength > CARD_MAX_BYTES) throw new Error("Payload is too large");
+  
+  return { payloadLength };
+}
+
+export const THUMBNAIL_WIDTH = 300;
+export const THUMBNAIL_HEIGHT = THUMBNAIL_WIDTH / CARD_WIDTH * CARD_HEIGHT;
+export const THUMBNAIL_MARGIN = 0.02;
+
+export function createThumbnail(img: HTMLImageElement | Image) {
+  const canvas = createCanvas(THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT);
+  const ctx = canvas.getContext("2d");
+  
+  let scaledWidth = img.naturalWidth;
+  let scaledHeight = img.naturalHeight;
+  if(scaledWidth > THUMBNAIL_WIDTH) {
+    scaledHeight = THUMBNAIL_WIDTH / scaledWidth * scaledHeight;
+    scaledWidth = THUMBNAIL_WIDTH;
+  }
+  if(scaledHeight < THUMBNAIL_HEIGHT) {
+    scaledWidth = THUMBNAIL_HEIGHT / scaledHeight * scaledWidth;
+    scaledHeight = THUMBNAIL_HEIGHT;
+  }
+  scaledWidth *= 1 + THUMBNAIL_MARGIN;
+  scaledHeight *= 1 + THUMBNAIL_MARGIN;
+  
+  ctx.drawImage(img, (THUMBNAIL_WIDTH - scaledWidth) / 2, (THUMBNAIL_HEIGHT - scaledHeight) / 3, scaledWidth, scaledHeight);
+  
+  return canvas;
 }

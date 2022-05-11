@@ -151,6 +151,14 @@
 
     a {
       margin-left: 2em;
+      
+      &:focus {
+        color: inherit;
+      }
+  
+      &:hover {
+        color: #b3b3b3;
+      }
     }
 
     &.sticky {

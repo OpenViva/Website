@@ -7,6 +7,7 @@ interface Configs {
   port: number;
   discordInvite: string;
   contactEmail: string;
+  storagePath: string;
   github: {
     owner: string;
     repo: string;

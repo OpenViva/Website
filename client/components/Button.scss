@@ -1,25 +1,13 @@
+@import "../mixins";
 
 .Button {
+  @include ButtonBox;
+  
   position: relative;
-  display: inline-block;
-  background: #ad7b00;
-  border: 1px solid #8d6700;
-  box-shadow: rgba(#8d6700, 0.2) 0 -5px 8px inset;
-  color: rgba(#ffcb67, 0.9);
-  font-weight: bold;
-  padding: 0.5em;
-  border-radius: 0.5em;
-  overflow: hidden;
   cursor: pointer;
-  transition: background-color 0.1s;
-  user-select: none;
-  text-align: center;
   width: 10em;
   min-width: min-content;
-  white-space: nowrap;
-  font-size: inherit;
-  font-family: inherit;
-  vertical-align: bottom;
+  overflow: hidden;
   
   label {
     display: inline-block;
@@ -33,26 +21,19 @@
   }
   
   &:hover, &:focus {
-    background: #a47500;
-    
     label {
       background: #f5c262;
     }
   }
   
   &:active {
-    background: #8a6600;
-    
     label {
       background: #e3b55b;
     }
   }
   
   &.primary {
-    background: #ffcb67;
-    border-color: #ad7b00;
-    box-shadow: rgba(#ad7b00, 0.2) 0 -5px 8px inset;
-    color: rgba(#5d3b00, 0.8);
+    @include PrimaryButtonBox;
     
     label {
       background: #ad7b00;
@@ -60,16 +41,12 @@
     }
     
     &:hover, &:focus {
-      background: #f5c262;
-  
       label {
         background: #a47500;
       }
     }
   
     &:active {
-      background: #e3b55b;
-  
       label {
         background: #8a6600;
       }

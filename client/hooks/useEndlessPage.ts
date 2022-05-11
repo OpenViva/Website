@@ -5,7 +5,7 @@ import useChange, { arrayCmp } from "./useChange";
 
 export interface EndlessPageOptions<Res, Req, I> {
   pathname: string;
-  search?: Omit<Req, 'page'>;
+  search?: Omit<Req, 'page'> | URLSearchParams;
   initialPage?: I[];
   responseMap: (response: Res) => I[];
 }
