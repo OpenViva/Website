@@ -7,10 +7,18 @@
   
   .button {
     @include PrimaryButtonBox;
-    
+  
+    position: relative;
     padding: 0.3em 0.5em;
     cursor: pointer;
     font-size: 75%;
+    
+    &.open {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+      z-index: 999;
+      border-bottom-color: transparent;
+    }
   }
   
   .menu {
@@ -21,9 +29,12 @@
     flex-direction: column;
     top: 100%;
     right: 0;
-    z-index: 999;
+    z-index: 998;
     padding: 0;
     overflow: hidden;
+    border-radius: 0.2em;
+    border-top-right-radius: 0;
+    box-shadow: rgba(#8d6700, 0.2) 0 -5px 8px inset, 0 0 5px black;
     
     > * {
       margin: 0;

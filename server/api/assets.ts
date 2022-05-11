@@ -1,12 +1,24 @@
 import PromiseRouter from "express-promise-router";
 import multer from "multer";
 import { RequestHandlerEx } from "express-serve-static-core";
-import { AssetCategory, AssetsSearchRequest, AssetsSearchResponse, AssetSubcategory, AssetsUploadRequest, JustId, Order } from "../../types/api";
-import { checkArray, checkNumber, checkString } from "../helpers/utils";
+import { AssetCategory, AssetsSearchRequest, AssetsSearchResponse, AssetSubcategory, AssetsUploadRequest, AssetUpdateRequest, JustId, Order } from "../../types/api";
+import { checkArray, checkBoolean, checkNumber, checkString } from "../helpers/utils";
 import * as assetsController from "../controllers/assets";
 import HTTPError from "../helpers/HTTPError";
 
 export const router = PromiseRouter();
+
+router.patch<JustId, Empty, AssetUpdateRequest>("/:id", async (req, res) => {
+  if(!req.user?.admin) throw new HTTPError(403);
+  
+  const name = checkString(req.body.name, "name", { min: 0, max: 32, trim: true, required: false });
+  const description = checkString(req.body.description, "description", { min: 0, max: 512, trim: true, required: false });
+  const approved = checkBoolean(req.body.approved, "approved", { required: false });
+  
+  await assetsController.update(req.params.id, { name, description, approved });
+  
+  res.json({});
+});
 
 router.post<never, JustId, AssetsUploadRequest>("/", multer({
   storage: multer.memoryStorage(),
@@ -22,7 +34,7 @@ router.post<never, JustId, AssetsUploadRequest>("/", multer({
 ]) as RequestHandlerEx, async (req, res) => {
   if(!req.user) throw new HTTPError(401);
   const name = checkString(req.body.name, "name", { min: 0, max: 32, trim: true });
-  const description = checkString(req.body.description, "description", { min: 0, max: 512, trim: true, required: false });
+  const description = checkString(req.body.description, "description", { min: 0, max: 512, trim: true });
   const category = checkString(req.body.category, "category", { trim: true, oneOf: Object.values(AssetCategory) }) as AssetCategory;
   const creator = req.user?.id;
   const files: Dict<Express.Multer.File> = {};
@@ -45,6 +57,14 @@ router.post<never, JustId, AssetsUploadRequest>("/", multer({
   res.json({ id });
 });
 
+router.delete<JustId, Empty>("/Lid", async (req, res) => {
+  if(!req.user?.admin) throw new HTTPError(403);
+  
+  await assetsController.remove(req.params.id);
+  
+  res.json({});
+});
+
 router.get<never, AssetsSearchResponse, AssetsSearchRequest>("/", async (req, res) => {
   const text = checkString(req.query.text, "text", { required: false, min: 0, max: 512, trim: true });
   const page = checkNumber(req.query.page, "page", { required: false, min: 0, max: 100 });
@@ -63,8 +83,11 @@ router.get<never, AssetsSearchResponse, AssetsSearchRequest>("/", async (req, re
     max: 20,
     checkInner: (id, name) => checkString(id, name, { oneOf: Object.values(AssetSubcategory) }) as AssetSubcategory,
   });
+  const approved = !req.query.approved || req.query.approved === true || req.query.approved as any === "true";
   
-  const assets = await assetsController.search({ text, page, pageSize, ids, sort, order, category, subcategory });
+  if(!approved && !req.user?.admin) throw new HTTPError(403);
+  
+  const assets = await assetsController.search({ text, page, pageSize, ids, sort, order, category, subcategory, approved });
   
   res.json(assets);
 });

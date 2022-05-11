@@ -5,12 +5,16 @@ import * as bcrypt from "../helpers/bcrypt";
 import db from "../helpers/db";
 import HTTPError from "../helpers/HTTPError";
 
-export async function get(id: string) {
-  return await db.queryFirst<User>(SQL`
-    SELECT id, username, email, confirmed, from_timestamp_ms(created) as created
+export async function get(id: string, admin?: boolean) {
+  const user = await db.queryFirst<User>(SQL`
+    SELECT id, username, email, confirmed, from_timestamp_ms(created) as created, admin
     FROM users
     WHERE id = ${id}
   `);
+  
+  if(user && !admin) delete user.admin;
+  
+  return user;
 }
 
 type UserUpdateFields = Pick<Partial<User>, "username" | "email" | "confirmed"> & { password?: string };
@@ -48,7 +52,7 @@ export async function checkPassword(id: string, password: string) {
 
 export async function login(email: string, password: string): Promise<User> {
   const user = await db.queryFirst<User & { password?: string }>(SQL`
-    SELECT id, username, email, confirmed, from_timestamp_ms(created) as created, password
+    SELECT id, username, email, confirmed, from_timestamp_ms(created) as created, password, admin
     FROM users
     WHERE email = ${email}
   `);
@@ -76,7 +80,12 @@ export async function register(user: RegisterUser) {
   const passwordHash = await bcrypt.hash(user.password);
   
   await db.query<JustId>(SQL`
-    INSERT INTO users(id, email, password, username, confirm_token)
-    VALUES (${userId}, ${user.email}, ${passwordHash}, ${user.username}, ${confirmToken})
+    INSERT INTO users(id, email, password, username, confirm_token, admin)
+    VALUES (${userId},
+            ${user.email},
+            ${passwordHash},
+            ${user.username},
+            ${confirmToken},
+            NOT EXISTS(SELECT 1 FROM users))
   `);
 }

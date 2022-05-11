@@ -2,6 +2,7 @@ import PromiseRouter from "express-promise-router";
 import { AssetCategory, AssetsPageRequest, AssetsPageResponse, AssetSubcategory, Order } from "../../types/api";
 import { checkArray, checkNumber, checkString } from "../helpers/utils";
 import * as assetsController from "../controllers/assets";
+import HTTPError from "../helpers/HTTPError";
 
 export const router = PromiseRouter();
 
@@ -23,8 +24,11 @@ router.get<never, AssetsPageResponse, AssetsPageRequest>('/', async (req, res) =
     max: 20,
     checkInner: (id, name) => checkString(id, name, { oneOf: Object.values(AssetSubcategory) }) as AssetSubcategory,
   });
+  const approved = !req.query.approved || req.query.approved === true || req.query.approved as any === "true";
   
-  const assets = await assetsController.search({ text, page, pageSize, ids, sort, order, category, subcategory });
+  if(!approved && !req.user?.admin) throw new HTTPError(403);
+  
+  const assets = await assetsController.search({ text, page, pageSize, ids, sort, order, category, subcategory, approved });
   
   res.react({
     assets,

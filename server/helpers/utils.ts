@@ -87,3 +87,25 @@ export function checkArray<T>(array: T[] | null | undefined, name: string, { max
   
   return array;
 }
+
+interface BooleanArgs<Req extends boolean = boolean, Null extends boolean = boolean> {
+  allowNull?: Null;
+  required?: Req;
+}
+
+export function checkBoolean(string: boolean | undefined, name: string, args?: BooleanArgs<true>): boolean;
+export function checkBoolean(string: boolean | null, name: string, args?: BooleanArgs<boolean, false>): boolean;
+export function checkBoolean(string: boolean | null | undefined, name: string, args?: BooleanArgs<true, false>): boolean;
+export function checkBoolean(string: boolean | null | undefined, name: string, args?: BooleanArgs<true, true>): boolean | null;
+export function checkBoolean(string: boolean | null | undefined, name: string, args?: BooleanArgs<false, true>): boolean | undefined;
+export function checkBoolean<Str extends string | null | undefined>(string: Str, name: string, args: BooleanArgs): Str;
+export function checkBoolean(input: any, name: string, { allowNull = false, required = true }: BooleanArgs = {}): boolean | null | undefined {
+  if(typeof input === "boolean") return input;
+  if(required && !input) throw new HTTPError(400, `Field ${name} is required`);
+  if(allowNull && input === null) return null;
+  if(input === undefined) return undefined;
+  if(input === "true") return true;
+  if(input === "false") return false;
+  
+  throw new HTTPError(400, `Field ${name} must be a boolean`);
+}

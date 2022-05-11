@@ -23,7 +23,7 @@ export default function Modal({ open, onOpen, onClose, trigger, className, compa
   useEffect(() => {
     if(open && !container) {
       const container = document.createElement("div");
-      document.documentElement.appendChild(container);
+      document.body.appendChild(container);
       setContainer(container);
     }
     if(!open && container) {

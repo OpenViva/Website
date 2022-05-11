@@ -5,6 +5,7 @@ import { subcategoryNames } from "../../../server/helpers/cardUtils";
 import RadioButton from "../../components/RadioButton";
 import { qsParse, qsStringify } from "../../helpers/utils";
 import Dropdown from "../../components/Dropdown";
+import useLocalUser from "../../hooks/useLocalUser";
 import "./SearchControls.scss";
 
 const subButtons = [...new Set(Object.values(subcategoryNames))].filter(sub => sub !== subcategoryNames[AssetSubcategory.UNKNOWN] && sub !== subcategoryNames[AssetSubcategory.CHARACTER]);
@@ -19,8 +20,11 @@ const sorts = {
 /* eslint-enable @typescript-eslint/naming-convention */
 
 export default function SearchControls() {
+  const { user } = useLocalUser();
   const [searchParams, updateSearch] = useSearchParams();
   const search: AssetsPageRequest = qsParse(searchParams.toString());
+  
+  if(search.approved) search.approved = (search.approved as any) === "true";
   
   const onCategoryChange = useCallback((ev: React.ChangeEvent<HTMLInputElement>) => {
     updateSearch(qsStringify({
@@ -37,7 +41,6 @@ export default function SearchControls() {
     if(value === "None") subcategory = undefined;
     else if(search.subcategory?.find(sub => subcategoryNames[sub] === value)) subcategory = search.subcategory.filter(sub => subcategoryNames[sub] !== value);
     else subcategory = [...(search.subcategory || []), ...Object.values(AssetSubcategory).filter(sub => subcategoryNames[sub] === value)];
-    console.log(subcategory);
     
     updateSearch(qsStringify({
       ...search,
@@ -60,6 +63,13 @@ export default function SearchControls() {
     updateSearch(qsStringify({
       ...search,
       text: ev.currentTarget.value,
+    }));
+  }, [search, updateSearch]);
+  
+  const onApprovedChange = useCallback((ev: React.ChangeEvent<HTMLInputElement>) => {
+    updateSearch(qsStringify({
+      ...search,
+      approved: search.approved === false ? undefined : "false",
     }));
   }, [search, updateSearch]);
   
@@ -99,6 +109,15 @@ export default function SearchControls() {
       </Dropdown>
       
       <div className="divider" />
+      
+      {user?.admin && <>
+        <RadioButton id="unapproved" name="approved" text="Unapproved" type="checkbox"
+                     value="false"
+                     active={search.approved === false}
+                     onChange={onApprovedChange} />
+        
+        <div className="divider" />
+      </> /* eslint-disable-line react/jsx-closing-tag-location */ }
       
       <input value={search.text || ""} placeholder="Text search..." onChange={onTextChange} />
     </div>

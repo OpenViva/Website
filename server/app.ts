@@ -45,6 +45,11 @@ app.use(csrf());
 app.use(userMiddleware);
 app.use(reactMiddleware);
 
+app.use((err: any, req: expressCore.RequestEx<any, any, any>, res: expressCore.ResponseEx<ErrorResponse>, next: expressCore.NextFunction) => {
+  if(err.code === "EBADCSRFTOKEN") next(new HTTPError(400, "Bad CSRF Token"));
+  else next(err);
+});
+
 app.use('/assets', express.static('assets'));
 app.use('/api', apiRouter);
 app.use('/', pagesRouter);

@@ -17,5 +17,6 @@
 		"database": "vivawebsite",
 		"password": "vivawebsite",
 		"port": 5432
-	}
+	},
+	"recaptcha": null
 }

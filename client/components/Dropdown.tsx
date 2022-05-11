@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./Dropdown.scss";
+import { classJoin } from "../helpers/utils";
 
 interface DropdownProps {
   text?: string;
@@ -34,7 +35,7 @@ export default function Dropdown({ children, text }: DropdownProps) {
   
   return (
     <div className="Dropdown" onFocus={onFocus} ref={containerRef}>
-      <div className="button" onMouseDown={onMouseDown} tabIndex={0}>
+      <div className={classJoin("button", open && "open")} onMouseDown={onMouseDown} tabIndex={0}>
         {text}
       </div>
       {open &&

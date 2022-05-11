@@ -14,6 +14,29 @@ import configs from "../helpers/configs";
 
 const howToInstall = fs.promises.readFile("./static/HOWTOINSTALL.txt");
 
+export interface UpdateFields {
+  name?: string;
+  description?: string;
+  approved?: boolean;
+}
+
+export async function update(id: string, fields: UpdateFields) {
+  const update = db.updateFields({
+    name: fields.name,
+    description: fields.description,
+    approved: fields.approved,
+  });
+  
+  if(!update) return;
+  
+  await db.query(SQL`
+    UPDATE assets
+    SET `.append(update)
+         .append(SQL`
+    WHERE id = ${id}
+  `));
+}
+
 export interface CreateFields {
   name: string;
   description: string;
@@ -92,14 +115,29 @@ export async function create({ name, description, category, creator }: CreateFie
   return result!.id;
 }
 
+export async function remove(id: string) {
+  const removed = await db.queryFirst<JustId>(SQL`
+    DELETE FROM assets
+    WHERE id = ${id}
+    RETURNING id
+  `);
+  
+  if(!removed) throw new HTTPError(404);
+  
+  const assetRoot = path.resolve(configs.storagePath, removed.id);
+  
+  await fs.promises.rm(assetRoot, { recursive: true, force: true });
+}
+
 export const sortColumns = ["id", "name", "created"];
 
-export async function search({ text, page = 0, pageSize = 20, ids, sort = "created", order = Order.DESC, category, subcategory }: AssetsSearchRequest) {
+export async function search({ text, page = 0, pageSize = 20, ids, sort = "created", order = Order.DESC, category, subcategory, approved }: AssetsSearchRequest) {
   const where: SQLStatement[] = [];
   if(text) where.push(...db.freeTextQuery(text, ["assets.name", "assets.description", "assets.category", "assets.subcategory", "users.username"]));
   if(ids && ids.length > 0) where.push(SQL`assets.id = ANY(${ids})`);
   if(category && category.length > 0) where.push(SQL`assets.category = ANY(${category})`);
   if(subcategory && subcategory.length > 0) where.push(SQL`assets.subcategory = ANY(${subcategory})`);
+  if(approved !== undefined) where.push(SQL`assets.approved = ${approved}`);
   const whereSQL = db.combineWhere(where);
   
   if(!sortColumns.includes(sort)) throw new HTTPError(400, "Invalid sorting column!");
@@ -114,7 +152,8 @@ export async function search({ text, page = 0, pageSize = 20, ids, sort = "creat
       users.username AS "creatorName",
       assets.category,
       assets.subcategory,
-      from_timestamp_ms(assets.created)
+      from_timestamp_ms(assets.created) AS "created",
+      assets.approved
     FROM assets
     LEFT JOIN users ON assets.creator = users.id
     `.append(whereSQL)

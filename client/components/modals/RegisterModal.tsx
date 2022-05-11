@@ -2,6 +2,7 @@ import React  from "react";
 import { toast } from "react-toastify";
 import { LocalUserRegisterRequest } from "../../../types/api";
 import useAsyncCallback from "../../hooks/useAsyncCallback";
+import useRecaptcha from "../../hooks/useRecaptcha";
 import useOpen from "../../hooks/useOpen";
 import FormIterator from "../../helpers/FormIterator";
 import requestJSON from "../../helpers/requestJSON";
@@ -17,6 +18,7 @@ interface FormData {
 
 export default function RegisterModal(props: ModalProps) {
   const { open, onOpen, onClose } = useOpen();
+  const { recaptcha, loading: recaptchaLoading } = useRecaptcha(open);
   
   const [unSubmit, loading] = useAsyncCallback(async (ev: React.FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
@@ -26,7 +28,11 @@ export default function RegisterModal(props: ModalProps) {
       return;
     }
     
-    const data = new FormIterator(ev.currentTarget).serialize<FormData>();
+    const data: LocalUserRegisterRequest = new FormIterator(ev.currentTarget).serialize<FormData>();
+    if(recaptcha) {
+      data.recaptchaToken = await recaptcha.execute();
+    }
+    
     await requestJSON<any, LocalUserRegisterRequest>({
       url: "/api/localUser/register",
       method: "POST",
@@ -47,7 +53,7 @@ export default function RegisterModal(props: ModalProps) {
         <Field label="Password" type="password" name="password" placeholder="********" required fluid min={6} />
         <div className="actions">
           <Button onClick={onClose}>Cancel</Button>
-          <Button primary loading={loading}>Register</Button>
+          <Button primary loading={loading || recaptchaLoading}>Register</Button>
         </div>
       </form>
     </Modal>

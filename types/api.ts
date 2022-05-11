@@ -28,6 +28,7 @@ export interface JustId {
 export interface Config {
   discordInvite: string;
   contactEmailBase64: string;
+  recaptchaSiteKey: string | null;
 }
 
 export interface User {
@@ -36,6 +37,7 @@ export interface User {
   email: string;
   confirmed: boolean;
   created: number;
+  admin?: boolean;
 }
 
 export enum AssetCategory {
@@ -74,6 +76,7 @@ export interface Asset {
   category: AssetCategory;
   subcategory: AssetSubcategory;
   created: number;
+  approved: boolean;
 }
 
 
@@ -114,6 +117,7 @@ export interface LocalUserRegisterRequest {
   username: string;
   email: string;
   password: string;
+  recaptchaToken?: string;
 }
 
 export interface LocalUserPatchRequest {
@@ -132,6 +136,7 @@ export interface AssetsSearchRequest {
   order?: string;
   category?: AssetCategory[];
   subcategory?: AssetSubcategory[];
+  approved?: boolean;
 }
 export type AssetsSearchResponse = Asset[];
 
@@ -142,4 +147,11 @@ export interface AssetsUploadRequest {
   clothing?: Express.Multer.File;
   character?: Express.Multer.File;
   skin?: Express.Multer.File;
+  recaptchaToken?: string;
+}
+
+export interface AssetUpdateRequest {
+  name?: string;
+  description?: string;
+  approved?: boolean;
 }

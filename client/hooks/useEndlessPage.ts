@@ -15,6 +15,7 @@ interface EndlessPageState<I> {
   page: number;
   end: boolean;
   fetching: boolean;
+  dirty: boolean;
 }
 
 type EndlessPageAction<I> = { kind: "fetchStart" | "fetchFail" | "fetchEnd" | "reset" }
@@ -31,25 +32,28 @@ function endlessPageReducer<I>(state: EndlessPageState<I>, action: EndlessPageAc
     case "fetchSuccess":
       return {
         ...state,
-        items: [...state.items, ...action.items],
+        items: state.dirty ? [...action.items] : [...state.items, ...action.items],
         page: state.page + 1,
         fetching: false,
+        dirty: false,
       };
     
     case "fetchEnd":
     case "fetchFail":
       return {
         ...state,
+        items: state.dirty ? [] : state.items,
         fetching: false,
         end: true,
+        dirty: false,
       };
     
     case "reset":
       return {
         ...state,
-        items: [],
         page: 0,
         end: false,
+        dirty: true,
       };
     
     default:
@@ -72,6 +76,7 @@ export default function useEndlessPage<Res, Req extends Pageable, I>(options: En
     page: options.initialPage ? 1 : 0,
     end: false,
     fetching: false,
+    dirty: false,
   }) as [EndlessPageState<I>, Dispatch<EndlessPageAction<I>>];
   const stateRef = useRef(state);
   stateRef.current = state;
@@ -118,7 +123,7 @@ export default function useEndlessPage<Res, Req extends Pageable, I>(options: En
     if(bodyHeight - bottomPosition < window.innerHeight * 0.5) requestNext();
   }, [requestNext]);
   
-  const reset = useCallback(() => {
+  const reset = useCallback(async () => {
     if(cancelRef.current) cancelRef.current();
     dispatch({ kind: "reset" });
   }, []);
@@ -136,6 +141,10 @@ export default function useEndlessPage<Res, Req extends Pageable, I>(options: En
   }, [checkScroll]);
   
   useChange(deps, reset, arrayCmp);
+  
+  useChange(state.dirty, dirty => {
+    if(dirty) requestNext().catch(console.error);
+  });
   
   return { ...state, requestNext, reset };
 }

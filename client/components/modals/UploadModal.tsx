@@ -2,6 +2,7 @@ import React, { useCallback, useState } from "react";
 import { toast } from "react-toastify";
 import { AssetCategory, AssetSubcategory } from "../../../types/api";
 import { CARD_HEIGHT, CARD_WIDTH, extractCharacterMetadata, extractClothingMetadata, subcategoryNames } from "../../../server/helpers/cardUtils";
+import useRecaptcha from "../../hooks/useRecaptcha";
 import useAsyncCallback from "../../hooks/useAsyncCallback";
 import useOpen from "../../hooks/useOpen";
 import requestJSON from "../../helpers/requestJSON";
@@ -14,6 +15,7 @@ import "./UploadModal.scss";
 
 export default function UploadModal(props: ModalProps) {
   const { open, onOpen, onClose } = useOpen();
+  const { recaptcha, loading: recaptchaLoading } = useRecaptcha(open);
   const [category, setCategory] = useState(AssetCategory.CHARACTER);
   const [subcategory, setSubcategory] = useState<AssetSubcategory | null>(null);
   
@@ -31,6 +33,10 @@ export default function UploadModal(props: ModalProps) {
     }
     
     const data = new FormData(ev.currentTarget);
+    if(recaptcha) {
+      data.append("recaptchaToken", await recaptcha.execute());
+    }
+    
     await requestJSON<any, FormData>({
       url: "/api/assets",
       method: "POST",
@@ -97,8 +103,8 @@ export default function UploadModal(props: ModalProps) {
     <Modal className="UploadModal" open={open} onOpen={onOpen} onClose={onClose} {...props}>
       <form onSubmit={onSubmit}>
         <h3>Upload New Content</h3>
-        <Field label="Name" name="name" placeholder="Name" required fluid maxlength={32} />
-        <Field as="textarea" label="Description" name="description" placeholder="Description..." fluid maxlength={512} />
+        <Field label="Name" name="name" placeholder="Name" required fluid maxLength={32} />
+        <Field as="textarea" label="Description" name="description" placeholder="Description..." fluid maxLength={512} />
         <Field label="Category">
           <RadioButton id="UploadModalCharacter" name="category"
                        value={AssetCategory.CHARACTER} text="Character"
@@ -112,7 +118,7 @@ export default function UploadModal(props: ModalProps) {
         {fileInputs}
         <div className="actions">
           <Button onClick={onClose}>Cancel</Button>
-          <Button primary loading={loading}>Upload</Button>
+          <Button primary loading={loading || recaptchaLoading}>Upload</Button>
         </div>
       </form>
     </Modal>

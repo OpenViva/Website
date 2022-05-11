@@ -42,11 +42,12 @@ CREATE TABLE users (
 CREATE TABLE assets (
   id UUID PRIMARY KEY,
   name TEXT NOT NULL,
-  description TEXT NOT NULL,
+  description TEXT,
   file TEXT NOT NULL,
   creator UUID REFERENCES users(id),
   category TEXT NOT NULL,
   subcategory TEXT NOT NULL,
+  approved BOOLEAN NOT NULL DEFAULT FALSE,
 
   created TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

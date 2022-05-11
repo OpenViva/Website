@@ -16,6 +16,10 @@ interface Configs {
   session: {
     secret: string;
   };
+  recaptcha: {
+    site: string;
+    secret: string;
+  } | null;
   db: PoolConfig;
 }
 

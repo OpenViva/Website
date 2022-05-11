@@ -9,17 +9,19 @@ import Segment from "../../components/Segment";
 import Paragraph from "../../components/Paragraph";
 import Placeholders from "../../components/Placeholders";
 import Loader from "../../components/Loader";
+import useLocalUser from "../../hooks/useLocalUser";
 import Profile from "./Profile";
 import AssetCard from "./AssetCard";
 import SearchControls from "./SearchControls";
 import "./AssetsPage.scss";
 
 export default function AssetsPage() {
+  const { user } = useLocalUser();
   const [pageData] = usePageData<AssetsPageResponse>(false);
   const [searchParams] = useSearchParams();
   const search: AssetsPageRequest = qsParse(searchParams.toString());
   
-  const { items, fetching } = useEndlessPage<AssetsSearchResponse, AssetsSearchRequest, Asset>({
+  const { items, fetching, reset } = useEndlessPage<AssetsSearchResponse, AssetsSearchRequest, Asset>({
     pathname: "/api/assets",
     initialPage: pageData?.assets,
     search,
@@ -41,7 +43,7 @@ export default function AssetsPage() {
         <SearchControls />
       </Section>
       <div className="cards">
-        {items.map(asset => <AssetCard key={asset.id} asset={asset} />)}
+        {items.map(asset => <AssetCard key={asset.id} asset={asset} admin={user?.admin} refresh={reset} />)}
         <Placeholders count={10} />
         {fetching &&
           <div className="loaderWrap">

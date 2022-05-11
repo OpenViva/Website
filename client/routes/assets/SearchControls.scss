@@ -31,6 +31,10 @@
     margin: 0 0.5em;
   }
   
+  .RadioButton + .divider {
+    margin-left: 0;
+  }
+  
   input {
     flex: 1;
   }

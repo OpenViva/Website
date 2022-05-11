@@ -31,6 +31,7 @@ export default function reactMiddleware(req: expressCore.RequestEx<any, any, any
             _config: {
               discordInvite: configs.discordInvite,
               contactEmailBase64: Buffer.from(configs.contactEmail).toString("base64"),
+              recaptchaSiteKey: configs.recaptcha?.site || null,
             },
           };
           
