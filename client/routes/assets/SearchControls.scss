@@ -17,7 +17,7 @@
   }
   
   .Dropdown .menu {
-    .RadioButton {
+    .CheckButton {
       text-align: left;
       border: none;
       border-radius: 0;
@@ -31,7 +31,7 @@
     margin: 0 0.5em;
   }
   
-  .RadioButton + .divider {
+  .CheckButton + .divider {
     margin-left: 0;
   }
   

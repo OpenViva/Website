@@ -59,7 +59,7 @@ function Header({ compact = false }) {
   const links1 = <>
     <NavLink to="/">About</NavLink>
     <NavLink to="/download">Download</NavLink>
-    <NavLink to="/assets">Mods & Cards</NavLink>
+    <NavLink to="/assets">Mods</NavLink>
   </>; // eslint-disable-line react/jsx-closing-tag-location
   
   const links2 = <>

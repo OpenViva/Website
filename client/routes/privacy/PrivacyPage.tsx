@@ -9,9 +9,11 @@ export default function PrivacyPage() {
       <Section>
         <Segment>
           <Paragraph header="Privacy policy">
-            In order to comply with state and federal law, this privacy policy was created as is as following:
-            Due to the nature of this game, we do not collect any data from the user and any data
-            we get is voluntarily given to use by the user for debugging purposes.
+            Viva-project.org is a publicly accessible website and therefore all content uploaded to the site will first be verified before publishing.
+            
+            When not logged in, your data will not be collected. After account creation, your email address is collected along with records of your uploads to the site for takedown notices.
+            
+            We only use cookies for essential functions of the site and are only stored when you are logged in or sign up.
           </Paragraph>
         </Segment>
       </Section>

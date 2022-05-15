@@ -6,12 +6,18 @@ import useAsyncCallback from "../../hooks/useAsyncCallback";
 import useOpen from "../../hooks/useOpen";
 import requestJSON from "../../helpers/requestJSON";
 import useObjectURL from "../../hooks/useObjectURL";
+import CheckButtonGroup from "../CheckButtonGroup";
 import Captcha from "../Captcha";
 import Button from "../Button";
 import Field from "../Field";
-import RadioButton from "../RadioButton";
+import CheckButton from "../CheckButton";
 import Modal, { ModalProps } from "./Modal";
 import "./UploadModal.scss";
+
+const categoryItems = [
+  { value: AssetCategory.CHARACTER, text: "Character" },
+  { value: AssetCategory.CLOTHING, text: "Clothing" },
+];
 
 export default function UploadModal(props: ModalProps) {
   const { open, onOpen, onClose } = useOpen();
@@ -101,14 +107,7 @@ export default function UploadModal(props: ModalProps) {
         <Field label="Name" name="name" placeholder="Name" required fluid maxLength={32} />
         <Field as="textarea" label="Description" name="description" placeholder="Description..." fluid maxLength={512} />
         <Field label="Category">
-          <RadioButton id="UploadModalCharacter" name="category"
-                       value={AssetCategory.CHARACTER} text="Character"
-                       active={category === AssetCategory.CHARACTER}
-                       onChange={onCategoryChange}  />
-          <RadioButton id="UploadModalClothing" name="category"
-                       value={AssetCategory.CLOTHING} text="Clothing"
-                       active={category === AssetCategory.CLOTHING}
-                       onChange={onCategoryChange}  />
+          <CheckButtonGroup name="category" radio defaultValue={category} onChange={setCategory} items={categoryItems} />
         </Field>
         {fileInputs}
         <Captcha />

@@ -34,6 +34,8 @@ router.post<never, JustId, AssetsUploadRequest>("/", captchaMiddleware, multer({
   { name: 'skin', maxCount: 1 },
 ]) as RequestHandlerEx, async (req, res) => {
   if(!req.user) throw new HTTPError(401);
+  if(req.user?.banned) throw new HTTPError(403, "You are banned");
+  
   const name = checkString(req.body.name, "name", { min: 0, max: 32, trim: true });
   const description = checkString(req.body.description, "description", { min: 0, max: 512, trim: true });
   const category = checkString(req.body.category, "category", { trim: true, oneOf: Object.values(AssetCategory) }) as AssetCategory;
@@ -58,7 +60,7 @@ router.post<never, JustId, AssetsUploadRequest>("/", captchaMiddleware, multer({
   res.json({ id });
 });
 
-router.delete<JustId, Empty>("/Lid", async (req, res) => {
+router.delete<JustId, Empty>("/:id", async (req, res) => {
   if(!req.user?.admin) throw new HTTPError(403);
   
   await assetsController.remove(req.params.id);

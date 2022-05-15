@@ -33,8 +33,12 @@ export default function AssetsPage() {
       <Section vertical className="header">
         <Segment className="text">
           <Paragraph header="Mods and cards">
-            Here you can find mods and characters which are currently only supported on our mod branch and character cards which are currently only supported on the main branch.
-            To submit or request a character, mod or card, please join our discord server and ask there.
+            Here, you can find character and outfit cards.
+          </Paragraph>
+          <Paragraph>
+            To install a character card, extract the zip file if it is zipped and move the &quot;Cards&quot; folder inside of the folder where &quot;viva.exe&quot; is located. If windows asks you to merge, click yes.<br />
+            To install a clothing card, navigate into the &quot;Cards&quot; folder and then into the &quot;Clothes&quot; folder. You can then move the .png into the folder.<br />
+            To submit a card, create an account and upload it. Once it is verified, it will appear here. If you are a card creator, we highly recommend joining the discord.
           </Paragraph>
         </Segment>
         <Profile />

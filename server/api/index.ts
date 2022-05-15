@@ -5,6 +5,7 @@ import HTTPError from "../helpers/HTTPError";
 import { ErrorResponse } from "../../types/api";
 import * as localUser from "./localUser";
 import * as assets from "./assets";
+import * as users from "./users";
 
 export const router = PromiseRouter();
 
@@ -16,6 +17,7 @@ router.use((req, res, next) => {
 
 router.use("/localUser", localUser.router);
 router.use("/assets", assets.router);
+router.use("/users", users.router);
 
 router.use((req, res, next) => {
   next(new HTTPError(404));

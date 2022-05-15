@@ -105,7 +105,7 @@ export function checkBoolean(input: any, name: string, { allowNull = false, requ
   if(typeof input === "boolean") return input;
   if(required && !input) throw new HTTPError(400, `Field ${name} is required`);
   if(allowNull && input === null) return null;
-  if(input === undefined) return undefined;
+  if(input === undefined || input === "") return undefined;
   if(input === "true") return true;
   if(input === "false") return false;
   

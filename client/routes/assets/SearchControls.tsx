@@ -2,22 +2,27 @@ import React, { useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import { AssetCategory, AssetsPageRequest, AssetSubcategory, Order } from "../../../types/api";
 import { subcategoryNames } from "../../../server/helpers/cardUtils";
-import RadioButton from "../../components/RadioButton";
+import CheckButton from "../../components/CheckButton";
 import { qsParse, qsStringify } from "../../helpers/utils";
 import Dropdown from "../../components/Dropdown";
 import useLocalUser from "../../hooks/useLocalUser";
+import CheckButtonGroup from "../../components/CheckButtonGroup";
 import "./SearchControls.scss";
 
-const subButtons = [...new Set(Object.values(subcategoryNames))].filter(sub => sub !== subcategoryNames[AssetSubcategory.UNKNOWN] && sub !== subcategoryNames[AssetSubcategory.CHARACTER]);
+const categoryItems = [
+  { value: AssetCategory.CHARACTER, text: "Characters" },
+  { value: AssetCategory.CLOTHING, text: "Clothing" },
+];
 
-/* eslint-disable @typescript-eslint/naming-convention */
-const sorts = {
-  "Newest First": ["created", Order.DESC],
-  "Oldest First": ["created", Order.ASC],
-  "Name A-Z": ["name", Order.ASC],
-  "Name Z-A": ["name", Order.DESC],
-};
-/* eslint-enable @typescript-eslint/naming-convention */
+const subItems = [...new Set(Object.values(subcategoryNames))].filter(sub => sub !== subcategoryNames[AssetSubcategory.UNKNOWN] && sub !== subcategoryNames[AssetSubcategory.CHARACTER])
+                                                              .map(sub => ({ value: sub, text: sub }));
+
+const sortItems = [
+  { text: "Newest First", value: ["created", Order.DESC] },
+  { text: "Oldest First", value: ["created", Order.ASC] },
+  { text: "Name A-Z", value: ["name", Order.ASC] },
+  { text: "Name Z-A", value: ["name", Order.DESC] },
+];
 
 export default function SearchControls() {
   const { user } = useLocalUser();
@@ -26,36 +31,23 @@ export default function SearchControls() {
   
   if(search.approved) search.approved = (search.approved as any) === "true";
   
-  const onCategoryChange = useCallback((ev: React.ChangeEvent<HTMLInputElement>) => {
+  const onCategoryChange = useCallback((category) => {
     updateSearch(qsStringify({
       ...search,
-      subcategory: ev.currentTarget.value !== AssetCategory.CLOTHING ? [] : search.subcategory,
-      category: ev.currentTarget.value !== "None" ? [ev.currentTarget.value] : undefined,
+      category,
+      subcategory: category !== AssetCategory.CLOTHING ? [] : search.subcategory,
     }));
   }, [search, updateSearch]);
   
-  const onSubcategoryChange = useCallback((ev: React.ChangeEvent<HTMLInputElement>) => {
-    const value = ev.currentTarget.value;
-    let subcategory: AssetSubcategory[] | undefined;
+  const onSubcategoryChange = useCallback((subcategory) => {
+    const subs = Object.values(AssetSubcategory).filter(sub => subcategory.includes(subcategoryNames[sub]));
     
-    if(value === "None") subcategory = undefined;
-    else if(search.subcategory?.find(sub => subcategoryNames[sub] === value)) subcategory = search.subcategory.filter(sub => subcategoryNames[sub] !== value);
-    else subcategory = [...(search.subcategory || []), ...Object.values(AssetSubcategory).filter(sub => subcategoryNames[sub] === value)];
-    
-    updateSearch(qsStringify({
-      ...search,
-      subcategory,
-      category: [AssetCategory.CLOTHING],
-    }));
+    updateSearch(qsStringify({ ...search, subcategory: subs }));
   }, [search, updateSearch]);
   
-  const onSortChange = useCallback((ev: React.ChangeEvent<HTMLInputElement>) => {
-    const sort = ev.currentTarget.value as keyof typeof sorts;
-    
+  const onSortChange = useCallback(([sort, order]) => {
     updateSearch(qsStringify({
-      ...search,
-      sort: sorts[sort][0],
-      order: sorts[sort][1],
+      ...search, sort, order,
     }));
   }, [search, updateSearch]);
   
@@ -66,55 +58,35 @@ export default function SearchControls() {
     }));
   }, [search, updateSearch]);
   
-  const onApprovedChange = useCallback((ev: React.ChangeEvent<HTMLInputElement>) => {
+  const onUnapprovedChange = useCallback(unapproved => {
     updateSearch(qsStringify({
       ...search,
-      approved: search.approved === false ? undefined : "false",
+      approved: !unapproved && undefined, // use undefined instead of true
     }));
   }, [search, updateSearch]);
+  
+  const subsDefault = search.subcategory?.map(sub => subcategoryNames[sub]);
   
   return (
     <div className="SearchControls">
       <span>Filters:</span>
-      <RadioButton id="categoryAll" name="category" text="All Cards"
-                   value="None"
-                   active={!search.category || search.category.length === 0}
-                   onChange={onCategoryChange} />
-      <RadioButton id="categoryCha" name="category" text="Characters"
-                   value={AssetCategory.CHARACTER}
-                   active={!!search.category?.includes(AssetCategory.CHARACTER)}
-                   onChange={onCategoryChange} />
-      <RadioButton id="categoryClo" name="category" text="Clothing"
-                   value={AssetCategory.CLOTHING}
-                   active={!!search.category?.includes(AssetCategory.CLOTHING)}
-                   onChange={onCategoryChange} />
+      <CheckButtonGroup defaultValue={search.category} radio nullItem="All Cards" items={categoryItems} onChange={onCategoryChange} />
       <Dropdown text="⋯">
-        <RadioButton id="subAll" name="subcategory" text="Show All" type="checkbox" muted
-                     value="None"
-                     active={!search.subcategory || search.subcategory.length === 0}
-                     onChange={onSubcategoryChange} />
-        {subButtons.map(subcategory => <RadioButton key={subcategory} id={`sub${subcategory}`} name="subcategory" text={subcategory} type="checkbox" muted
-                                                    value={subcategory}
-                                                    active={!!search.subcategory?.find(sub => subcategoryNames[sub] === subcategory)}
-                                                    onChange={onSubcategoryChange} />)}
+        <CheckButtonGroup defaultValue={subsDefault} nullItem="Show All" items={subItems} onChange={onSubcategoryChange} />
       </Dropdown>
       
       <div className="divider" />
       
-      <Dropdown text={`${(Object.entries(sorts).find(([name, [sort, order]]) => sort === search.sort && order === search.order) || ["Sorting"])[0]} ▾`}>
-        {Object.keys(sorts).map(sort => <RadioButton key={sort} id={"sort" + sort} name="sort" text={sort} muted
-                                                     value={sort}
-                                                     active={search.sort === sorts[sort as keyof typeof sorts][0] && search.order === sorts[sort as keyof typeof sorts][1]}
-                                                     onChange={onSortChange} />)}
+      <Dropdown text={`${(sortItems.find(({ value: [sort, order] }) => sort === search.sort && order === search.order) || { text: "Sorting" }).text} ▾`}>
+        <CheckButtonGroup onChange={onSortChange} radio items={sortItems} />
       </Dropdown>
       
       <div className="divider" />
       
       {user?.admin && <>
-        <RadioButton id="unapproved" name="approved" text="Unapproved" type="checkbox"
-                     value="false"
-                     active={search.approved === false}
-                     onChange={onApprovedChange} />
+        <CheckButton name="approved" text="Unapproved" type="checkbox"
+                     checked={search.approved === false}
+                     onChange={onUnapprovedChange} />
         
         <div className="divider" />
       </> /* eslint-disable-line react/jsx-closing-tag-location */ }

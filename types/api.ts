@@ -35,9 +35,10 @@ export interface User {
   id: string;
   username: string;
   email: string;
-  confirmed: boolean;
+  verified: boolean;
   created: number;
-  admin?: boolean;
+  admin: boolean;
+  banned: boolean;
 }
 
 export enum AssetCategory {
@@ -120,7 +121,7 @@ export interface LocalUserRegisterRequest {
   "h-captcha-response"?: string; // eslint-disable-line @typescript-eslint/naming-convention
 }
 
-export interface LocalUserPatchRequest {
+export interface LocalUserUpdateRequest {
   username?: string;
   email?: string;
   newPassword?: string;
@@ -154,4 +155,25 @@ export interface AssetUpdateRequest {
   name?: string;
   description?: string;
   approved?: boolean;
+}
+
+export interface UsersSearchRequest {
+  text?: string;
+  page?: number;
+  pageSize?: number;
+  ids?: string[];
+  sort?: string;
+  order?: string;
+  banned?: boolean;
+  verified?: boolean;
+}
+export type UsersSearchResponse = User[];
+
+export interface UserUpdateRequest {
+  username?: string;
+  email?: string;
+  password?: string;
+  banned?: boolean;
+  verified?: boolean;
+  admin?: boolean;
 }

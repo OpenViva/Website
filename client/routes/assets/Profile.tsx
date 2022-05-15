@@ -7,6 +7,7 @@ import Field from "../../components/Field";
 import ChangeInfoModal from "../../components/modals/ChangeInfoModal";
 import Segment from "../../components/Segment";
 import UploadModal from "../../components/modals/UploadModal";
+import ManageUsers from "../../components/modals/ManageUsers";
 import "./Profile.scss";
 
 export default function Profile() {
@@ -19,6 +20,7 @@ export default function Profile() {
         <Field label="Your email">{user.email}</Field>
         <Field label="Creation date">{new Date(user.created).toLocaleDateString()}</Field>
         <div className="links">
+          {user.admin && <><ManageUsers trigger={<a href="#">Manage Users</a>} /><br /></>}
           <ChangeInfoModal trigger={<a href="#">Change Account Information</a>} /><br />
           <a href="#" onClick={logout}>Log Out</a><br />
         </div>

@@ -1,0 +1,48 @@
+
+.ManageUsers {
+  .Segment {
+    width: 50em;
+  
+    .users {
+      margin-top: 1em;
+      overflow-x: hidden;
+      overflow-y: auto;
+      height: calc(100vh - 15em);
+    }
+  }
+}
+
+.UserRow {
+  border-top: 1px solid #8a6600;
+  padding: 0.25em;
+  transition: background-color 0.3s;
+  background-color: #ffecb3;
+  display: flex;
+  
+  &:nth-child(2n) {
+    background-color: #ffe5ab;
+  }
+  
+  &:hover {
+    background-color: #ffe194;
+  }
+  
+  .username {
+    font-weight: bold;
+    opacity: 0.5;
+    font-style: italic;
+    margin-left: 0.5em;
+  }
+  
+  .spacer {
+    flex: 1;
+  }
+  
+  .admin { color: #0d61ff; }
+  .unadmin { color: #5490fa; }
+  
+  .ban { color: #ff0707; }
+  .unban { color: #ff7d7d; }
+  
+  .unverify { color: #8a6600; }
+}

@@ -1,6 +1,6 @@
 import React  from "react";
 import { toast } from "react-toastify";
-import { LocalUserPatchRequest, User } from "../../../types/api";
+import { LocalUserUpdateRequest, User } from "../../../types/api";
 import useLocalUser from "../../hooks/useLocalUser";
 import useOpen from "../../hooks/useOpen";
 import FormIterator from "../../helpers/FormIterator";
@@ -36,16 +36,17 @@ export default function ChangeInfoModal(props: ModalProps) {
     if(!data.email || data.email === user?.email) data.email = undefined;
     if(!data.newPassword) data.newPassword = undefined;
     
-    const newUser = await requestJSON<User, LocalUserPatchRequest>({
+    const newUser = await requestJSON<User, LocalUserUpdateRequest>({
       url: "/api/localUser",
       method: "PATCH",
       data,
     });
     
     replaceUser(newUser);
+    onClose();
     
     toast.success("Your information has been updated");
-  }, [replaceUser, user]);
+  }, [onClose, replaceUser, user]);
   
   if(!user) return props.trigger || null;
   

@@ -1,5 +1,5 @@
 import PromiseRouter from "express-promise-router";
-import { LocalUserLoginRequest, LocalUserLoginResponse, LocalUserPatchRequest, LocalUserRegisterRequest, User } from "../../types/api";
+import { LocalUserLoginRequest, LocalUserLoginResponse, LocalUserUpdateRequest, LocalUserRegisterRequest, User } from "../../types/api";
 import * as usersController from "../controllers/users";
 import { checkString } from "../helpers/utils";
 import HTTPError from "../helpers/HTTPError";
@@ -33,7 +33,7 @@ router.post<never, Empty, LocalUserRegisterRequest>("/register", captchaMiddlewa
   res.json({});
 });
 
-router.patch<never, User, LocalUserPatchRequest>("/", async (req, res) => {
+router.patch<never, User, LocalUserUpdateRequest>("/", async (req, res) => {
   if(!req.user) throw new HTTPError(401);
   
   const username = checkString(req.body.username, "username", { max: 50, trim: true, required: false });
