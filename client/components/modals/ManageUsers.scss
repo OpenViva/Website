@@ -3,6 +3,10 @@
   .Segment {
     width: 50em;
   
+    .Field > input {
+      margin-right: 0.75em;
+    }
+  
     .users {
       margin-top: 1em;
       overflow-x: hidden;
@@ -29,9 +33,17 @@
   
   .username {
     font-weight: bold;
+  }
+  
+  .email {
+    font-weight: bold;
     opacity: 0.5;
     font-style: italic;
-    margin-left: 0.5em;
+  }
+  
+  .ip {
+    opacity: 0.5;
+    font-style: italic;
   }
   
   .spacer {

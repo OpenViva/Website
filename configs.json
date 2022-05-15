@@ -4,7 +4,7 @@
 	"contactEmail": "openviva.contact@gmail.com",
 	"storagePath": "./assets",
 	"discordWebhook": null,
-	"publicUrl": "http://localhost:3939",
+	"email": null,
 	"github": {
 		"owner": "OpenViva",
 		"repo": "OpenViva",

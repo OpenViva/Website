@@ -39,6 +39,7 @@ export interface User {
   created: number;
   admin: boolean;
   banned: boolean;
+  lastLoginIp: string;
 }
 
 export enum AssetCategory {
@@ -101,6 +102,13 @@ export interface AssetsPageResponse {
   assets: Asset[];
 }
 
+export interface VerifyEmailRequest {
+  token: string;
+}
+export interface VerifyEmailResponse {
+  verified: boolean;
+}
+
 /////////////////////////
 //         API         //
 /////////////////////////
@@ -119,6 +127,9 @@ export interface LocalUserRegisterRequest {
   email: string;
   password: string;
   "h-captcha-response"?: string; // eslint-disable-line @typescript-eslint/naming-convention
+}
+export interface LocalUserRegisterResponse {
+  verified: boolean;
 }
 
 export interface LocalUserUpdateRequest {

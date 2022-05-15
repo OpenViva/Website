@@ -11,6 +11,7 @@ import FaqPage from "./routes/faq/FaqPage";
 import PrivacyPage from "./routes/privacy/PrivacyPage";
 import AssetsPage from "./routes/assets/AssetsPage";
 import Layout from "./components/Layout";
+import VerifyEmailPage from "./routes/verifyEmail/VerifyEmailPage";
 import "./globals.scss";
 
 interface AppProps {
@@ -43,6 +44,7 @@ export default function App({ initialData }: AppProps) {
             <Route path="/assets" element={<Layout><AssetsPage /></Layout>} />
             <Route path="/faq" element={<Layout><FaqPage /></Layout>} />
             <Route path="/privacy" element={<Layout><PrivacyPage /></Layout>} />
+            <Route path="/verifyEmail" element={<Layout><VerifyEmailPage /></Layout>} />
             <Route path="*" element={<Layout><NotFoundPage /></Layout>} />
           </Routes>
           <ToastContainer position="bottom-right" newestOnTop />

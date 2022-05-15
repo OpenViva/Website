@@ -1,6 +1,6 @@
 import React  from "react";
 import { toast } from "react-toastify";
-import { LocalUserRegisterRequest } from "../../../types/api";
+import { LocalUserRegisterRequest, LocalUserRegisterResponse } from "../../../types/api";
 import useAsyncCallback from "../../hooks/useAsyncCallback";
 import useOpen from "../../hooks/useOpen";
 import FormIterator from "../../helpers/FormIterator";
@@ -28,13 +28,17 @@ export default function RegisterModal(props: ModalProps) {
     }
     
     const data: LocalUserRegisterRequest = new FormIterator(ev.currentTarget).serialize<FormData>();
-    await requestJSON<any, LocalUserRegisterRequest>({
+    const { verified } = await requestJSON<LocalUserRegisterResponse, LocalUserRegisterRequest>({
       url: "/api/localUser/register",
       method: "POST",
       data,
     });
     
-    toast.success("You account has been registered. Please check your email for confirmation link.");
+    if(verified) {
+      toast.success("Your account has been created. You can now log in.");
+    } else {
+      toast.success("Your account has been created. Please check your email for confirmation link.");
+    }
     
     onClose();
   }, [onClose]);

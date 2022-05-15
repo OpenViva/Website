@@ -44,9 +44,10 @@ export interface CreateFields {
   description: string;
   category: AssetCategory;
   creator: string;
+  baseUrl: string;
 }
 
-export async function create({ name, description, category, creator }: CreateFields, files: Dict<Express.Multer.File>) {
+export async function create({ name, description, category, creator, baseUrl }: CreateFields, files: Dict<Express.Multer.File>) {
   const id = uuid();
   const assetRoot = path.resolve(configs.storagePath, id);
   let fileName: string;
@@ -122,6 +123,7 @@ export async function create({ name, description, category, creator }: CreateFie
     description,
     uploaderName: creatorUser?.username,
     uploaderEmail: creatorUser?.email,
+    baseUrl,
   });
   
   return result!.id;

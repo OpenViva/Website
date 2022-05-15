@@ -39,8 +39,6 @@ export default function ManageUsers(props: ModalProps) {
       <h3>Manage Users</h3>
       <Field>
         <input placeholder="Search..." value={text} onChange={onTextChange} />
-      </Field>
-      <Field>
         <CheckButton text="Verified" triState checked={verified} onChange={setVerified} />
         <CheckButton text="Banned" triState checked={banned} onChange={setBanned} />
       </Field>
@@ -77,8 +75,9 @@ function UserRow({ user, refreshUsers }: UserProps) {
   
   return (
     <div className="UserRow">
-      <span className="email">{user.email}</span>
-      <span className="username">({user.username})</span>
+      <span className="username">{user.username}</span>&ensp;
+      <span className="email">&lt;{user.email}&gt;</span>&ensp;
+      <span className="ip">({user.lastLoginIp})</span>
       <div className="spacer" />
       {!user.verified && <a href="#" className="verify" onClick={onVerify}>Verify</a>}
       {user.verified && <a href="#" className="unverify" onClick={onVerify}>Unverify</a>}

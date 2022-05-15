@@ -3,6 +3,7 @@ import axios from "axios";
 import configs from "./configs";
 
 export interface CardNotification {
+  baseUrl: string;
   id: string;
   name: string;
   description: string;
@@ -10,7 +11,7 @@ export interface CardNotification {
   uploaderEmail: string;
 }
 
-export async function cardNotificationWebhook({ id, name, description, uploaderName, uploaderEmail }: CardNotification) {
+export async function cardNotificationWebhook({ baseUrl, id, name, description, uploaderName, uploaderEmail }: CardNotification) {
   if(configs.discordWebhook) {
     await axios.post(configs.discordWebhook, {
       content: "Lmao!",
@@ -18,17 +19,17 @@ export async function cardNotificationWebhook({ id, name, description, uploaderN
         {
           title: name,
           description,
-          url: `${configs.publicUrl}/assets/?approved=false&id=${id}`,
+          url: `${baseUrl}/assets/?approved=false&id=${id}`,
           color: 5814783,
           author: {
             name: `${uploaderName} <${uploaderEmail}>`,
           },
           footer: {
-            icon_url: `${configs.publicUrl}/static/openviva_small.png`,
+            icon_url: `${baseUrl}/static/openviva_small.png`,
           },
           timestamp: "2022-05-23T22:00:00.000Z",
           image: {
-            url: `${configs.publicUrl}/assets/${id}/thumbnail.jpg`,
+            url: `${baseUrl}/assets/${id}/thumbnail.jpg`,
           },
         },
       ],

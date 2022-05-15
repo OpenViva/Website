@@ -40,6 +40,7 @@ router.post<never, JustId, AssetsUploadRequest>("/", multer({
   const description = checkString(req.body.description, "description", { min: 0, max: 512, trim: true, required: false }) || "";
   const category = checkString(req.body.category, "category", { trim: true, oneOf: Object.values(AssetCategory) }) as AssetCategory;
   const creator = req.user?.id;
+  const baseUrl = req.protocol + '://' + req.get('host');
   const files: Dict<Express.Multer.File> = {};
   
   for(const [key, value] of Object.entries(req.files!)) {
@@ -55,7 +56,7 @@ router.post<never, JustId, AssetsUploadRequest>("/", multer({
     throw new HTTPError(501);
   }
   
-  const id = await assetsController.create({ name, description, category, creator }, files);
+  const id = await assetsController.create({ name, description, category, creator, baseUrl }, files);
   
   res.json({ id });
 });

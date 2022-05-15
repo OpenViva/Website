@@ -4,6 +4,8 @@ import { JustId, Order, User, UsersSearchRequest } from "../../types/api";
 import * as bcrypt from "../helpers/bcrypt";
 import db from "../helpers/db";
 import HTTPError from "../helpers/HTTPError";
+import * as emails from "../helpers/emails";
+import { qsStringify } from "../../client/helpers/utils";
 
 type UserUpdateFields = Pick<Partial<User>, "username" | "email" | "verified" | "admin" | "banned"> & { password?: string };
 
@@ -48,7 +50,7 @@ export async function login(email: string, password: string, ip: string): Promis
   `);
   
   if(!user) throw new HTTPError(400, "Invalid email or password");
-  if(!user.verified) throw new HTTPError(400, "You need to confirm your email first.");
+  if(!user.verified) throw new HTTPError(400, "You need to verify your email first.");
   
   const same = await bcrypt.compare(password, user.password!);
   if(!same) throw new HTTPError(400, "Invalid email or password");
@@ -66,22 +68,42 @@ interface RegisterUser {
   email: string;
   password: string;
   username: string;
+  baseUrl: string;
 }
 
 export async function register(user: RegisterUser) {
   const userId = uuid();
-  const confirmToken = uuid();
+  const verified = !emails.isConfigured();
+  const verifyToken = uuid();
   const passwordHash = await bcrypt.hash(user.password);
   
+  if(!verified) {
+    const verifyUrl = `${user.baseUrl}/verifyEmail${qsStringify({ token: verifyToken })}`;
+    const title = "OpenViva - Verify Mail";
+    const content = `
+      <p>Press the button to verify this email address.</p>
+      <button>
+        <a title="Activate my account" href="${verifyUrl}" target="_blank" style="text-decoration: none;color: #4d5bc7;">Verify Email</a>
+      </button>
+      <p>Alternatively you can use link below:</p>
+      <a href="${verifyUrl}">${verifyUrl}</a>
+    `;
+    
+    await emails.send({ name: user.username, content, title, baseUrl: user.baseUrl, recipient: user.email });
+  }
+  
   await db.query<JustId>(SQL`
-    INSERT INTO users(id, email, password, username, confirm_token, admin)
+    INSERT INTO users(id, email, password, username, verified, verify_token, admin)
     VALUES (${userId},
             ${user.email},
             ${passwordHash},
             ${user.username},
-            ${confirmToken},
+            ${verified},
+            ${verifyToken},
             NOT EXISTS(SELECT 1 FROM users))
   `);
+  
+  return verified;
 }
 
 export const sortColumns = ["id", "name", "created"];
@@ -105,7 +127,8 @@ export async function search({ text, page = 0, pageSize = 50, ids, sort = "creat
       users.verified,
       users.created,
       users.admin,
-      users.banned
+      users.banned,
+      users.last_login_ip as "lastLoginIp"
     FROM users
     `.append(whereSQL)
      .append(`ORDER BY users.${sort} ${order}`)
@@ -119,4 +142,15 @@ export async function get(id: string) {
   const [user] = await search({ ids: [id], pageSize: 1 });
   
   return user || null;
+}
+
+export async function verifyEmail(token: string) {
+  const result = await db.queryFirst(SQL`
+    UPDATE users
+    SET verified = true
+    WHERE verify_token = ${token}
+    RETURNING 1
+  `);
+  
+  return !!result;
 }

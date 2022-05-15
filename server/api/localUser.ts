@@ -1,5 +1,5 @@
 import PromiseRouter from "express-promise-router";
-import { LocalUserLoginRequest, LocalUserLoginResponse, LocalUserUpdateRequest, LocalUserRegisterRequest, User } from "../../types/api";
+import { LocalUserLoginRequest, LocalUserLoginResponse, LocalUserUpdateRequest, LocalUserRegisterRequest, User, LocalUserRegisterResponse } from "../../types/api";
 import * as usersController from "../controllers/users";
 import { checkString } from "../helpers/utils";
 import HTTPError from "../helpers/HTTPError";
@@ -23,14 +23,15 @@ router.post<never, LocalUserLoginResponse, LocalUserLoginRequest>("/login", asyn
   res.json(user);
 });
 
-router.post<never, Empty, LocalUserRegisterRequest>("/register", captchaMiddleware, async (req, res) => {
+router.post<never, LocalUserRegisterResponse, LocalUserRegisterRequest>("/register", captchaMiddleware, async (req, res) => {
   const email = checkString(req.body.email, "email", { max: 50, trim: true, lowercase: true });
   const username = checkString(req.body.username, "username", { max: 50, trim: true });
   const password = checkString(req.body.password, "password", { min: 6 });
+  const baseUrl = req.protocol + '://' + req.get('host');
   
-  await usersController.register({ username, password, email });
+  const verified = await usersController.register({ username, password, email, baseUrl });
   
-  res.json({});
+  res.json({ verified });
 });
 
 router.patch<never, User, LocalUserUpdateRequest>("/", async (req, res) => {

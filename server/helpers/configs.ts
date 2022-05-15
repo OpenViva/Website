@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
 import * as fs from 'fs';
+import SMTPTransport from "nodemailer/lib/smtp-transport";
 import { PoolConfig } from "pg";
 import defaultConfig from "../../configs.json";
 
@@ -9,7 +10,7 @@ interface Configs {
   contactEmail: string;
   storagePath: string;
   discordWebhook: string | null;
-  publicUrl: string;
+  email: SMTPTransport.Options | null;
   github: {
     owner: string;
     repo: string;

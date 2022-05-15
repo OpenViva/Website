@@ -1,11 +1,13 @@
 import PromiseRouter from "express-promise-router";
 import { IndexPageResponse } from "../../types/api";
 import * as githubController from "../controllers/github";
+import * as verifyEmail from "./verifyEmail";
 import * as download from "./download";
 import * as assets from "./assets";
 
 export const router = PromiseRouter();
 
+router.use("/verifyEmail", verifyEmail.router);
 router.use("/download", download.router);
 router.use("/assets", assets.router);
 
