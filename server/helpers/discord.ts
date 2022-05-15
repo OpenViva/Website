@@ -14,12 +14,12 @@ export interface CardNotification {
 export async function cardNotificationWebhook({ baseUrl, id, name, description, uploaderName, uploaderEmail }: CardNotification) {
   if(configs.discordWebhook) {
     await axios.post(configs.discordWebhook, {
-      content: "Lmao!",
+      content: "New card has been posted.\nClean it up janny!",
       embeds: [
         {
           title: name,
           description,
-          url: `${baseUrl}/assets/?approved=false&id=${id}`,
+          url: `${baseUrl}/assets/?approved=false&ids=${id}`,
           color: 5814783,
           author: {
             name: `${uploaderName} <${uploaderEmail}>`,
