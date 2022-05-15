@@ -17,7 +17,7 @@ router.post<never, LocalUserLoginResponse, LocalUserLoginRequest>("/login", asyn
   const email = checkString(req.body.email, "email", { trim: true, lowercase: true });
   const password = checkString(req.body.password, "password", {});
   
-  const user = await usersController.login(email, password);
+  const user = await usersController.login(email, password, req.ip);
   req.session.userId = user.id;
   
   res.json(user);

@@ -7,6 +7,8 @@ import "./Captcha.scss";
 
 type CaptchaProps = Partial<React.ComponentProps<typeof HCaptcha>>;
 
+const doNothing = () => {};
+
 export default function Captcha(props: CaptchaProps) {
   const { hcaptchaSiteKey } = useConfig();
   

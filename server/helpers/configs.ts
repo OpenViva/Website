@@ -8,6 +8,8 @@ interface Configs {
   discordInvite: string;
   contactEmail: string;
   storagePath: string;
+  discordWebhook: string | null;
+  publicUrl: string;
   github: {
     owner: string;
     repo: string;

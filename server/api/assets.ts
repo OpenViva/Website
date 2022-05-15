@@ -21,7 +21,7 @@ router.patch<JustId, Empty, AssetUpdateRequest>("/:id", async (req, res) => {
   res.json({});
 });
 
-router.post<never, JustId, AssetsUploadRequest>("/", captchaMiddleware, multer({
+router.post<never, JustId, AssetsUploadRequest>("/", multer({
   storage: multer.memoryStorage(),
   limits: {
     fileSize: 10 * 1024 * 1024,
@@ -32,12 +32,12 @@ router.post<never, JustId, AssetsUploadRequest>("/", captchaMiddleware, multer({
   { name: 'clothing', maxCount: 1 },
   { name: 'character', maxCount: 1 },
   { name: 'skin', maxCount: 1 },
-]) as RequestHandlerEx, async (req, res) => {
+]) as RequestHandlerEx, captchaMiddleware, async (req, res) => {
   if(!req.user) throw new HTTPError(401);
   if(req.user?.banned) throw new HTTPError(403, "You are banned");
   
   const name = checkString(req.body.name, "name", { min: 0, max: 32, trim: true });
-  const description = checkString(req.body.description, "description", { min: 0, max: 512, trim: true });
+  const description = checkString(req.body.description, "description", { min: 0, max: 512, trim: true, required: false }) || "";
   const category = checkString(req.body.category, "category", { trim: true, oneOf: Object.values(AssetCategory) }) as AssetCategory;
   const creator = req.user?.id;
   const files: Dict<Express.Multer.File> = {};

@@ -11,6 +11,8 @@ import { createThumbnail, extractCharacterMetadata, extractClothingMetadata } fr
 import db from "../helpers/db";
 import HTTPError from "../helpers/HTTPError";
 import configs from "../helpers/configs";
+import { cardNotificationWebhook } from "../helpers/discord";
+import * as usersController from "./users";
 
 const howToInstall = fs.promises.readFile("./static/HOWTOINSTALL.txt");
 
@@ -111,6 +113,16 @@ export async function create({ name, description, category, creator }: CreateFie
     )
     RETURNING id
   `);
+  
+  const creatorUser = await usersController.get(creator);
+  
+  await cardNotificationWebhook({
+    id,
+    name,
+    description,
+    uploaderName: creatorUser?.username,
+    uploaderEmail: creatorUser?.email,
+  });
   
   return result!.id;
 }

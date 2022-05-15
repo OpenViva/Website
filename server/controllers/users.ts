@@ -40,7 +40,7 @@ export async function checkPassword(id: string, password: string) {
   if(!same) throw new HTTPError(400, "Invalid password");
 }
 
-export async function login(email: string, password: string): Promise<User> {
+export async function login(email: string, password: string, ip: string): Promise<User> {
   const user = await db.queryFirst<User & { password?: string }>(SQL`
     SELECT id, username, email, verified, from_timestamp_ms(created) as created, password, admin
     FROM users
@@ -54,6 +54,10 @@ export async function login(email: string, password: string): Promise<User> {
   if(!same) throw new HTTPError(400, "Invalid email or password");
   
   delete user.password;
+  
+  await db.query(SQL`
+    UPDATE users SET last_login_ip = ${ip} WHERE id = ${user.id}
+  `);
   
   return user;
 }

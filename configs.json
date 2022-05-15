@@ -3,6 +3,8 @@
 	"discordInvite": "https://discord.gg/openviva",
 	"contactEmail": "openviva.contact@gmail.com",
 	"storagePath": "./assets",
+	"discordWebhook": null,
+	"publicUrl": "http://localhost:3939",
 	"github": {
 		"owner": "OpenViva",
 		"repo": "OpenViva",

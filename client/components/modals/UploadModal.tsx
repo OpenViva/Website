@@ -10,7 +10,6 @@ import CheckButtonGroup from "../CheckButtonGroup";
 import Captcha from "../Captcha";
 import Button from "../Button";
 import Field from "../Field";
-import CheckButton from "../CheckButton";
 import Modal, { ModalProps } from "./Modal";
 import "./UploadModal.scss";
 
@@ -38,6 +37,7 @@ export default function UploadModal(props: ModalProps) {
     }
     
     const data = new FormData(ev.currentTarget);
+    console.log(data.get("h-captcha-response"));
     await requestJSON<any, FormData>({
       url: "/api/assets",
       method: "POST",
