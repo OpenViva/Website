@@ -1,0 +1,17 @@
+
+.Captcha {
+  position: relative;
+  text-align: center;
+  line-height: 0;
+  
+  .Loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  .Loader + * {
+    position: relative;
+  }
+}

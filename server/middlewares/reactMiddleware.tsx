@@ -5,8 +5,8 @@ import expressCore from "express-serve-static-core";
 import App from "../../client/App";
 import { InitialData } from "../../types/api";
 import index from '../views/index.handlebars';
-import HTTPError from "./HTTPError";
-import configs from "./configs";
+import HTTPError from "../helpers/HTTPError";
+import configs from "../helpers/configs";
 
 const removeTags = /[<>]/g;
 const tagsToReplace: Record<string, string> = {
@@ -31,7 +31,7 @@ export default function reactMiddleware(req: expressCore.RequestEx<any, any, any
             _config: {
               discordInvite: configs.discordInvite,
               contactEmailBase64: Buffer.from(configs.contactEmail).toString("base64"),
-              recaptchaSiteKey: configs.recaptcha?.site || null,
+              hcaptchaSiteKey: configs.hcaptcha?.site || null,
             },
           };
           

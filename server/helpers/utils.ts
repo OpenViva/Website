@@ -4,6 +4,7 @@ interface StringArgs<Req extends boolean = boolean, Null extends boolean = boole
   max?: number | null;
   min?: number | null;
   trim?: boolean | null;
+  lowercase?: boolean | null;
   oneOf?: string[];
   allowNull?: Null;
   required?: Req;
@@ -15,12 +16,13 @@ export function checkString(string: string | null | undefined, name: string, arg
 export function checkString(string: string | null | undefined, name: string, args?: StringArgs<true, true>): string | null;
 export function checkString(string: string | null | undefined, name: string, args?: StringArgs<false, true>): string | undefined;
 export function checkString<Str extends string | null | undefined>(string: Str, name: string, args: StringArgs): Str;
-export function checkString(string: any, name: string, { max = null, min = 1, trim = false, allowNull = false, required = true, oneOf }: StringArgs = {}): string | null | undefined {
+export function checkString(string: any, name: string, { max = null, min = 1, trim = false, lowercase = false, allowNull = false, required = true, oneOf }: StringArgs = {}): string | null | undefined {
   if(required && !string) throw new HTTPError(400, `Field ${name} is required`);
   if(allowNull && string === null) return null;
   if(string === undefined) return undefined;
   if(typeof string !== "string") throw new HTTPError(400, `Field ${name} must be a string`);
   if(trim) string = string.trim();
+  if(lowercase) string = string.toLowerCase();
   if(oneOf && !oneOf.includes(string)) throw new HTTPError(400, `Field ${name} must be one of: ${oneOf.join(", ")}`);
   if(min !== null && min > 0 && string.length === 0) throw new HTTPError(400, `Field ${name} cannot be empty`);
   if(min !== null && string.length < min) throw new HTTPError(400, `Field ${name} must have at least ${min} characters`);

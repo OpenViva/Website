@@ -2,11 +2,11 @@ import React, { useCallback, useState } from "react";
 import { toast } from "react-toastify";
 import { AssetCategory, AssetSubcategory } from "../../../types/api";
 import { CARD_HEIGHT, CARD_WIDTH, extractCharacterMetadata, extractClothingMetadata, subcategoryNames } from "../../../server/helpers/cardUtils";
-import useRecaptcha from "../../hooks/useRecaptcha";
 import useAsyncCallback from "../../hooks/useAsyncCallback";
 import useOpen from "../../hooks/useOpen";
 import requestJSON from "../../helpers/requestJSON";
 import useObjectURL from "../../hooks/useObjectURL";
+import Captcha from "../Captcha";
 import Button from "../Button";
 import Field from "../Field";
 import RadioButton from "../RadioButton";
@@ -15,7 +15,6 @@ import "./UploadModal.scss";
 
 export default function UploadModal(props: ModalProps) {
   const { open, onOpen, onClose } = useOpen();
-  const { recaptcha, loading: recaptchaLoading } = useRecaptcha(open);
   const [category, setCategory] = useState(AssetCategory.CHARACTER);
   const [subcategory, setSubcategory] = useState<AssetSubcategory | null>(null);
   
@@ -33,10 +32,6 @@ export default function UploadModal(props: ModalProps) {
     }
     
     const data = new FormData(ev.currentTarget);
-    if(recaptcha) {
-      data.append("recaptchaToken", await recaptcha.execute());
-    }
-    
     await requestJSON<any, FormData>({
       url: "/api/assets",
       method: "POST",
@@ -116,9 +111,10 @@ export default function UploadModal(props: ModalProps) {
                        onChange={onCategoryChange}  />
         </Field>
         {fileInputs}
+        <Captcha />
         <div className="actions">
           <Button onClick={onClose}>Cancel</Button>
-          <Button primary loading={loading || recaptchaLoading}>Upload</Button>
+          <Button primary loading={loading}>Upload</Button>
         </div>
       </form>
     </Modal>

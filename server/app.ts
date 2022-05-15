@@ -9,8 +9,8 @@ import csrf from "csurf";
 import session from "express-session";
 import pgConnect from "connect-pg-simple";
 import { ErrorResponse } from "../types/api";
-import reactMiddleware from "./helpers/reactHelper";
-import userMiddleware from "./helpers/userMiddleware";
+import reactMiddleware from "./middlewares/reactMiddleware";
+import userMiddleware from "./middlewares/userMiddleware";
 import HTTPError from "./helpers/HTTPError";
 import configs from "./helpers/configs";
 import { pool } from "./helpers/db";
@@ -26,7 +26,7 @@ app.use(compression());
 app.use('/static', express.static('static'));
 if(process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
-  app.use(require('./helpers/webpackHelper').mount());
+  app.use(require('./middlewares/webpackMiddleware').mount());
 } else {
   app.use('/client.js', express.static('client.js'));
   app.use('/style.css', express.static('style.css'));

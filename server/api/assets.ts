@@ -5,6 +5,7 @@ import { AssetCategory, AssetsSearchRequest, AssetsSearchResponse, AssetSubcateg
 import { checkArray, checkBoolean, checkNumber, checkString } from "../helpers/utils";
 import * as assetsController from "../controllers/assets";
 import HTTPError from "../helpers/HTTPError";
+import captchaMiddleware from "../middlewares/captchaMiddleware";
 
 export const router = PromiseRouter();
 
@@ -20,7 +21,7 @@ router.patch<JustId, Empty, AssetUpdateRequest>("/:id", async (req, res) => {
   res.json({});
 });
 
-router.post<never, JustId, AssetsUploadRequest>("/", multer({
+router.post<never, JustId, AssetsUploadRequest>("/", captchaMiddleware, multer({
   storage: multer.memoryStorage(),
   limits: {
     fileSize: 10 * 1024 * 1024,

@@ -2,10 +2,10 @@ import React  from "react";
 import { toast } from "react-toastify";
 import { LocalUserRegisterRequest } from "../../../types/api";
 import useAsyncCallback from "../../hooks/useAsyncCallback";
-import useRecaptcha from "../../hooks/useRecaptcha";
 import useOpen from "../../hooks/useOpen";
 import FormIterator from "../../helpers/FormIterator";
 import requestJSON from "../../helpers/requestJSON";
+import Captcha from "../Captcha";
 import Button from "../Button";
 import Field from "../Field";
 import Modal, { ModalProps } from "./Modal";
@@ -18,7 +18,6 @@ interface FormData {
 
 export default function RegisterModal(props: ModalProps) {
   const { open, onOpen, onClose } = useOpen();
-  const { recaptcha, loading: recaptchaLoading } = useRecaptcha(open);
   
   const [unSubmit, loading] = useAsyncCallback(async (ev: React.FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
@@ -29,10 +28,6 @@ export default function RegisterModal(props: ModalProps) {
     }
     
     const data: LocalUserRegisterRequest = new FormIterator(ev.currentTarget).serialize<FormData>();
-    if(recaptcha) {
-      data.recaptchaToken = await recaptcha.execute();
-    }
-    
     await requestJSON<any, LocalUserRegisterRequest>({
       url: "/api/localUser/register",
       method: "POST",
@@ -51,9 +46,10 @@ export default function RegisterModal(props: ModalProps) {
         <Field label="Username" name="username" placeholder="Your Name" required fluid max={50} />
         <Field label="Email" name="email" placeholder="yourname@example.org" type="email" required fluid max={50} />
         <Field label="Password" type="password" name="password" placeholder="********" required fluid min={6} />
+        <Captcha />
         <div className="actions">
           <Button onClick={onClose}>Cancel</Button>
-          <Button primary loading={loading || recaptchaLoading}>Register</Button>
+          <Button primary loading={loading}>Register</Button>
         </div>
       </form>
     </Modal>

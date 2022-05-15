@@ -16,7 +16,7 @@ interface Configs {
   session: {
     secret: string;
   };
-  recaptcha: {
+  hcaptcha: {
     site: string;
     secret: string;
   } | null;

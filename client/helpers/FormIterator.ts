@@ -13,6 +13,9 @@ export default class FormIterator implements Iterable<readonly [string, any]> {
     yield* Array.from(this.form.querySelectorAll("input"))
           .map(field => [field.name, field.value] as const)
           .filter(field => !used.includes(field[0]));
+    yield* Array.from(this.form.querySelectorAll("textarea"))
+                .map(field => [field.name, field.value] as const)
+                .filter(field => !used.includes(field[0]));
   }
   
   serialize<T extends Record<string, any>>(): T {

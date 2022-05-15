@@ -28,7 +28,7 @@ export interface JustId {
 export interface Config {
   discordInvite: string;
   contactEmailBase64: string;
-  recaptchaSiteKey: string | null;
+  hcaptchaSiteKey: string | null;
 }
 
 export interface User {
@@ -117,7 +117,7 @@ export interface LocalUserRegisterRequest {
   username: string;
   email: string;
   password: string;
-  recaptchaToken?: string;
+  "h-captcha-response"?: string; // eslint-disable-line @typescript-eslint/naming-convention
 }
 
 export interface LocalUserPatchRequest {
@@ -147,7 +147,7 @@ export interface AssetsUploadRequest {
   clothing?: Express.Multer.File;
   character?: Express.Multer.File;
   skin?: Express.Multer.File;
-  recaptchaToken?: string;
+  "h-captcha-response"?: string; // eslint-disable-line @typescript-eslint/naming-convention
 }
 
 export interface AssetUpdateRequest {
