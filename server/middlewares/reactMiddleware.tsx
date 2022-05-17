@@ -7,6 +7,7 @@ import { InitialData } from "../../types/api";
 import index from '../views/index.handlebars';
 import HTTPError from "../helpers/HTTPError";
 import configs from "../helpers/configs";
+import { PageTitleProvider } from "../../client/hooks/usePageTitle";
 
 const removeTags = /[<>]/g;
 const tagsToReplace: Record<string, string> = {
@@ -24,6 +25,7 @@ export default function reactMiddleware(req: expressCore.RequestEx<any, any, any
     switch(req.accepts(['html', 'json'])) {
       case "html": {
         (async () => {
+          let pageTitle = "OpenViva";
           const initialData: InitialData & Data = {
             ...data,
             _csrf: req.csrfToken ? req.csrfToken() : undefined as any,
@@ -37,13 +39,18 @@ export default function reactMiddleware(req: expressCore.RequestEx<any, any, any
           
           const initialDataJSON = JSON.stringify(initialData).replace(removeTags, tag => tagsToReplace[tag] || tag);
           
-          res.send(index({
-            reactContent: ReactDOMServer.renderToString(
-              <StaticRouter location={req.originalUrl}>
+          const reactContent = ReactDOMServer.renderToString(
+            <StaticRouter location={req.originalUrl}>
+              <PageTitleProvider value={title => pageTitle = title}>
                 <App initialData={initialData} />
-              </StaticRouter>,
-            ),
+              </PageTitleProvider>
+            </StaticRouter>,
+          );
+          
+          res.send(index({
+            reactContent,
             initialData: initialDataJSON,
+            pageTitle,
             production: process.env.NODE_ENV === 'production',
           }));
         })().catch(next);

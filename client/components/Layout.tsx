@@ -3,6 +3,7 @@ import { Link, NavLink } from "react-router-dom";
 import { classJoin } from "../helpers/utils";
 import { useConfig } from "../hooks/usePageData";
 import useMeasure from "../hooks/useMeasure";
+import usePageTitle from "../hooks/usePageTitle";
 import ExLink from "./ExLink";
 import "./Layout.scss";
 
@@ -11,11 +12,13 @@ const MIN_HEIGHT = 600;
 
 interface LayoutProps {
   stickyFooter?: boolean;
+  title?: string;
   children?: React.ReactNode;
 }
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
-export default function Layout({ stickyFooter, children }: LayoutProps) {
+export default function Layout({ stickyFooter, title, children }: LayoutProps) {
+  usePageTitle(title);
   const [top, setTop] = useState(stickyFooter || false);
   const { rect, ref } = useMeasure();
   const compact = rect ? rect.width < 800 : false;

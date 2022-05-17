@@ -32,7 +32,7 @@ export default function AssetsPage() {
     <div className="AssetsPage">
       <Section vertical className="header">
         <Segment className="text">
-          <Paragraph header="Mods and cards">
+          <Paragraph header="Mods & Cards">
             Here, you can find character and outfit cards.
           </Paragraph>
           <Paragraph>

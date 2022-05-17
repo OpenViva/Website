@@ -39,13 +39,13 @@ export default function App({ initialData }: AppProps) {
       <PageDataProvider initialData={initialData}>
         <LocalUserProvider defaultUser={initialData._user}>
           <Routes>
-            <Route path="/" element={<Layout stickyFooter><IndexPage /></Layout>} />
-            <Route path="/download" element={<Layout><DownloadPage /></Layout>} />
-            <Route path="/assets" element={<Layout><AssetsPage /></Layout>} />
-            <Route path="/faq" element={<Layout><FaqPage /></Layout>} />
-            <Route path="/privacy" element={<Layout><PrivacyPage /></Layout>} />
+            <Route path="/" element={<Layout stickyFooter title="About"><IndexPage /></Layout>} />
+            <Route path="/download" element={<Layout title="Downloads"><DownloadPage /></Layout>} />
+            <Route path="/assets" element={<Layout title="Mods & Cards"><AssetsPage /></Layout>} />
+            <Route path="/faq" element={<Layout title="FAQ"><FaqPage /></Layout>} />
+            <Route path="/privacy" element={<Layout title="Privacy Policy"><PrivacyPage /></Layout>} />
             <Route path="/verifyEmail" element={<Layout><VerifyEmailPage /></Layout>} />
-            <Route path="*" element={<Layout><NotFoundPage /></Layout>} />
+            <Route path="*" element={<Layout title="Page Not Found"><NotFoundPage /></Layout>} />
           </Routes>
           <ToastContainer position="bottom-right" newestOnTop />
         </LocalUserProvider>
