@@ -1,6 +1,6 @@
 {
-    "name": "Boilerplate",
-    "short_name": "Boilerplate",
+    "name": "OpenViva",
+    "short_name": "OpenViva",
     "icons": [
         {
             "src": "/static/favicon/android-chrome-192x192.png",
@@ -13,7 +13,7 @@
             "type": "image/png"
         }
     ],
-    "theme_color": "#1cede3",
-    "background_color": "#1cede3",
+    "theme_color": "#4c5bc8",
+    "background_color": "#4c5bc8",
     "display": "standalone"
 }
