@@ -39,7 +39,7 @@ export default function App({ initialData }: AppProps) {
       <PageDataProvider initialData={initialData}>
         <LocalUserProvider defaultUser={initialData._user}>
           <Routes>
-            <Route path="/" element={<Layout stickyFooter title="About"><IndexPage /></Layout>} />
+            <Route path="/" element={<Layout stickyFooter><IndexPage /></Layout>} />
             <Route path="/download" element={<Layout title="Downloads"><DownloadPage /></Layout>} />
             <Route path="/assets" element={<Layout title="Mods & Cards"><AssetsPage /></Layout>} />
             <Route path="/faq" element={<Layout title="FAQ"><FaqPage /></Layout>} />
