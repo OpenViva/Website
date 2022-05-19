@@ -143,7 +143,7 @@ export async function remove(id: string) {
   await fs.promises.rm(assetRoot, { recursive: true, force: true });
 }
 
-export const sortColumns = ["id", "name", "created"];
+export const sortColumns = ["id", "name", "created", "downloads"];
 
 export async function search({ text, page = 0, pageSize = 20, ids, sort = "created", order = Order.DESC, category, subcategory, approved }: AssetsSearchRequest) {
   const where: SQLStatement[] = [];
@@ -167,7 +167,8 @@ export async function search({ text, page = 0, pageSize = 20, ids, sort = "creat
       assets.category,
       assets.subcategory,
       from_timestamp_ms(assets.created) AS "created",
-      assets.approved
+      assets.approved,
+      assets.downloads
     FROM assets
     LEFT JOIN users ON assets.creator = users.id
     `.append(whereSQL)
@@ -176,4 +177,13 @@ export async function search({ text, page = 0, pageSize = 20, ids, sort = "creat
     LIMIT ${pageSize}
     OFFSET ${page * pageSize}
   `));
+}
+
+
+export async function incDownloads(id: string) {
+  await db.query(SQL`
+    UPDATE assets
+    SET downloads = downloads + 1
+    WHERE id = ${id}
+  `);
 }

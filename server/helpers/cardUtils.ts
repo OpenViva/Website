@@ -10,17 +10,17 @@ export const subcategoryNames: Record<AssetSubcategory, string> = {
   [AssetSubcategory.UNKNOWN]: "Unknown",
   [AssetSubcategory.CHARACTER]: "Character",
   [AssetSubcategory.BLOUSE]: "Blouse",
-  [AssetSubcategory.JACKET]: "Jacket",
+  [AssetSubcategory.JACKET]: "Blouse",
   [AssetSubcategory.PANTY]: "Panty",
-  [AssetSubcategory.SANDALS]: "Sandals",
-  [AssetSubcategory.SWIMSUIT]: "School",
+  [AssetSubcategory.SANDALS]: "Shoe",
+  [AssetSubcategory.SWIMSUIT]: "Swimsuit",
   [AssetSubcategory.SHIRT]: "Shirt",
   [AssetSubcategory.SHOE]: "Shoe",
   [AssetSubcategory.SKIRT]: "Skirt",
   [AssetSubcategory.SPATS]: "Spats",
   [AssetSubcategory.STOCKING]: "Stockings",
-  [AssetSubcategory.TOWEL]: "Towel Wrap",
-  [AssetSubcategory.TSHIRT]: "T-shirt",
+  [AssetSubcategory.TOWEL]: "Swimsuit",
+  [AssetSubcategory.TSHIRT]: "Shirt",
 };
 
 export const categoryNames: Record<AssetCategory, string> = {
@@ -103,11 +103,11 @@ export function createThumbnail(img: HTMLImageElement | Image) {
   let scaledWidth = img.naturalWidth;
   let scaledHeight = img.naturalHeight;
   if(scaledWidth > THUMBNAIL_WIDTH) {
-    scaledHeight = THUMBNAIL_WIDTH / scaledWidth * scaledHeight;
+    scaledHeight *= THUMBNAIL_WIDTH / scaledWidth;
     scaledWidth = THUMBNAIL_WIDTH;
   }
   if(scaledHeight < THUMBNAIL_HEIGHT) {
-    scaledWidth = THUMBNAIL_HEIGHT / scaledHeight * scaledWidth;
+    scaledWidth *= THUMBNAIL_HEIGHT / scaledHeight;
     scaledHeight = THUMBNAIL_HEIGHT;
   }
   scaledWidth *= 1 + THUMBNAIL_MARGIN;

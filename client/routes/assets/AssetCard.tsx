@@ -47,6 +47,7 @@ export default function AssetCard({ asset, admin, refresh }: AssetCardProps) {
       <div><label>Category:</label> <span>{categoryNames[asset.category]} Card</span></div>
       <div><label>Subcategory:</label> <span>{subcategoryNames[asset.subcategory]}</span></div>
       <div><label>Uploaded:</label> <span>{new Date(asset.created).toLocaleDateString()}</span></div>
+      <div><label>Downloads:</label> <span>{asset.downloads}</span></div>
       {admin &&
         <div className="buttons">
           {!asset.approved && <a href="#" className="approve" onClick={onApprove}>Approve</a>}

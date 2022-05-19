@@ -20,6 +20,8 @@ const subItems = [...new Set(Object.values(subcategoryNames))].filter(sub => sub
 const sortItems = [
   { text: "Newest First", value: ["created", Order.DESC] },
   { text: "Oldest First", value: ["created", Order.ASC] },
+  { text: "Most Popular", value: ["downloads", Order.DESC] },
+  { text: "Least Popular", value: ["downloads", Order.ASC] },
   { text: "Name A-Z", value: ["name", Order.ASC] },
   { text: "Name Z-A", value: ["name", Order.DESC] },
 ];
@@ -42,7 +44,7 @@ export default function SearchControls() {
   const onSubcategoryChange = useCallback((subcategory) => {
     const subs = Object.values(AssetSubcategory).filter(sub => subcategory.includes(subcategoryNames[sub]));
     
-    updateSearch(qsStringify({ ...search, subcategory: subs }));
+    updateSearch(qsStringify({ ...search, category: AssetCategory.CLOTHING, subcategory: subs }));
   }, [search, updateSearch]);
   
   const onSortChange = useCallback(([sort, order]) => {

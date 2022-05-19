@@ -34,5 +34,6 @@ router.use((err: Partial<HTTPError>, req: expressCore.RequestEx<any, any, any>, 
       stack: process.env.NODE_ENV === 'development' ? err.stack : undefined,
     },
   };
+  
   res.status(code).json(result);
 });

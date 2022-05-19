@@ -79,6 +79,7 @@ export interface Asset {
   subcategory: AssetSubcategory;
   created: number;
   approved: boolean;
+  downloads: number;
 }
 
 

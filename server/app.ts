@@ -11,6 +11,7 @@ import pgConnect from "connect-pg-simple";
 import { ErrorResponse } from "../types/api";
 import reactMiddleware from "./middlewares/reactMiddleware";
 import userMiddleware from "./middlewares/userMiddleware";
+import countDownloadsMiddleware from "./middlewares/countDownloadsMiddleware";
 import HTTPError from "./helpers/HTTPError";
 import configs from "./helpers/configs";
 import { pool } from "./helpers/db";
@@ -45,6 +46,7 @@ app.use(session({
 app.use(csrf());
 app.use(userMiddleware);
 app.use(reactMiddleware);
+app.use(countDownloadsMiddleware);
 
 app.use((err: any, req: expressCore.RequestEx<any, any, any>, res: expressCore.ResponseEx<ErrorResponse>, next: expressCore.NextFunction) => {
   if(err.code === "EBADCSRFTOKEN") next(new HTTPError(400, "Bad CSRF Token"));
@@ -70,6 +72,7 @@ app.use((err: Partial<HTTPError>, req: expressCore.RequestEx<any, any, any>, res
       stack: process.env.NODE_ENV === 'development' ? err.stack : undefined,
     },
   };
+  
   if("react" in res) res.status(code).react(result);
   else res.status(code).json(result);
 });

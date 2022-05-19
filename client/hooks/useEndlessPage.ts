@@ -2,6 +2,7 @@ import { Dispatch, useCallback, useEffect, useReducer, useRef } from "react";
 import axios, { Canceler } from "axios";
 import requestJSON from "../helpers/requestJSON";
 import useChange, { arrayCmp } from "./useChange";
+import { useDebouncedCallback } from "use-debounce";
 
 export interface EndlessPageOptions<Res, Req, I> {
   pathname: string;
@@ -94,6 +95,7 @@ export default function useEndlessPage<Res, Req extends Pageable, I>(options: En
           ...optionsRef.current.search,
           page: stateRef.current.page,
         } as Req,
+        waitFix: true,
         cancelCb: cancel => cancelRef.current = cancel,
       });
       
@@ -123,10 +125,10 @@ export default function useEndlessPage<Res, Req extends Pageable, I>(options: En
     if(bodyHeight - bottomPosition < window.innerHeight * 0.5) requestNext();
   }, [requestNext]);
   
-  const reset = useCallback(async () => {
+  const reset = useDebouncedCallback(useCallback(async () => {
     if(cancelRef.current) cancelRef.current();
     dispatch({ kind: "reset" });
-  }, []);
+  }, []), 300);
   
   useEffect(() => checkScroll(), [checkScroll, state.items]);
   
