@@ -43,6 +43,8 @@ const db = {
       ret = ret.append(condition);
     }
     
+    ret = ret.append(SQL`\n`);
+    
     return ret;
   },
   
