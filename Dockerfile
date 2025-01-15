@@ -21,5 +21,6 @@ RUN apk add --update --no-cache \
     rm -rf /var/cache/apk/*
 ENV PORT=80
 EXPOSE 80
+HEALTHCHECK --interval=10s --timeout=5s --retries=2 CMD wget --no-verbose --tries=1 --spider "http://localhost:$PORT/" || exit 1
 COPY --from=builder /app .
 CMD ["npm", "start"]
