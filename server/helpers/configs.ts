@@ -6,6 +6,7 @@ import defaultConfig from "../../configs.json";
 
 interface Configs {
   port: number;
+  host?: string;
   discordInvite: string;
   contactEmail: string;
   storagePath: string;

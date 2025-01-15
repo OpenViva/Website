@@ -31,7 +31,7 @@ export const categoryNames: Record<AssetCategory, string> = {
 export function extractClothingMetadata(img: HTMLImageElement | Image) {
   const canvas = createCanvas(Math.ceil(CARD_METADATA_SIZE / 3), 1);
   const ctx = canvas.getContext("2d");
-  ctx.drawImage(img, 0, 1535, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
+  ctx.drawImage(img as Image, 0, 1535, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
   
   const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
   const data = new Uint8Array(256);
@@ -71,7 +71,7 @@ export function extractClothingMetadata(img: HTMLImageElement | Image) {
 export function extractCharacterMetadata(img: HTMLImageElement | Image) {
   const canvas = createCanvas(2, 1);
   const ctx = canvas.getContext("2d");
-  ctx.drawImage(img, 1024 - 2, 0, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
+  ctx.drawImage(img as Image, 1024 - 2, 0, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
   
   const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
   const data = new Uint8Array(4);
@@ -113,7 +113,7 @@ export function createThumbnail(img: HTMLImageElement | Image) {
   scaledWidth *= 1 + THUMBNAIL_MARGIN;
   scaledHeight *= 1 + THUMBNAIL_MARGIN;
   
-  ctx.drawImage(img, (THUMBNAIL_WIDTH - scaledWidth) / 2, (THUMBNAIL_HEIGHT - scaledHeight) / 3, scaledWidth, scaledHeight);
+  ctx.drawImage(img as Image, (THUMBNAIL_WIDTH - scaledWidth) / 2, (THUMBNAIL_HEIGHT - scaledHeight) / 3, scaledWidth, scaledHeight);
   
   return canvas;
 }
