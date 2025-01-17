@@ -4,7 +4,7 @@ RUN apk add --update --no-cache \
     # Gyp build dependencies
     python3 make g++ py-setuptools \
     # Canvas build dependencies
-    pixman-dev cairo-dev pango-dev pkgconfig; \
+    pixman-dev cairo-dev jpeg-dev pango-dev giflib-dev pixman-dev pangomm-dev libjpeg-turbo-dev freetype-dev pkgconfig; \
     rm -rf /var/cache/apk/*
 COPY . .
 RUN npm install && \
@@ -17,7 +17,7 @@ FROM node:20-alpine AS runtime
 WORKDIR /app
 RUN apk add --update --no-cache \
     # Canvas runtime dependencies
-    python3 cairo pango; \
+    python3 cairo jpeg pango giflib pixman pangomm libjpeg-turbo freetype; \
     rm -rf /var/cache/apk/*
 ENV PORT=80
 EXPOSE 80
