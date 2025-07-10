@@ -14,7 +14,12 @@ export default function IndexPage() {
   const [pageData] = usePageData<IndexPageResponse>();
   
   let buttons: React.ReactNode;
-  if(pageData?.latest) {
+  if(config.steamLink) {
+    buttons = <>
+      <Button primary as={ExLink} to={config.steamLink}>Wishlist On Steam</Button>
+      <Button as={Link} to="/download">Other Versions</Button>
+    </>; // eslint-disable-line react/jsx-closing-tag-location
+  } else if(pageData?.latest) {
     buttons = <>
       {pageData?.latest ? <Button primary label={pageData.latest.version} as={ExLink} to={pageData.latest.url}>Download Latest</Button> : null}
       <Button as={Link} to="/download">Other Versions</Button>

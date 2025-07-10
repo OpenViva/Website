@@ -27,6 +27,7 @@ export interface JustId {
 
 export interface Config {
   discordInvite: string;
+  steamLink: string | null;
   contactEmailBase64: string;
   hcaptchaSiteKey: string | null;
 }

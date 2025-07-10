@@ -8,6 +8,7 @@ interface Configs {
   port: number;
   host?: string;
   discordInvite: string;
+  steamLink?: string | null;
   contactEmail: string;
   storagePath: string;
   discordWebhook: string | null;

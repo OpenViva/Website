@@ -32,6 +32,7 @@ export default function reactMiddleware(req: expressCore.RequestEx<any, any, any
             _user: req.user || null,
             _config: {
               discordInvite: configs.discordInvite,
+              steamLink: configs.steamLink || null,
               contactEmailBase64: Buffer.from(configs.contactEmail).toString("base64"),
               hcaptchaSiteKey: configs.hcaptcha?.site || null,
             },

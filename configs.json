@@ -1,6 +1,7 @@
 {
 	"port": 3939,
 	"discordInvite": "https://discord.gg/openviva",
+	"steamLink": "https://store.steampowered.com/app/2294970/Viva/",
 	"contactEmail": "openviva.contact@gmail.com",
 	"storagePath": "./assets",
 	"discordWebhook": null,
